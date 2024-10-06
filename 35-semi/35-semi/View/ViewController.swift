@@ -58,40 +58,17 @@ final class ViewController: UIViewController {
         setLayout()
     }
     
-    private func setStyle() {
-        self.view.backgroundColor = .white
-    }
+}
+
+@objc
+extension ViewController {
     
-    private func setUI() {
-        [modeLabel, nextButton, modeButton].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            self.view.addSubview($0)
-        }
-    }
-    
-    private func setLayout() {
-        NSLayoutConstraint.activate(
-            [
-                modeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
-                modeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                modeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                modeButton.topAnchor.constraint(equalTo: modeLabel.bottomAnchor, constant: 50),
-                modeButton.heightAnchor.constraint(equalToConstant: 50),
-                modeButton.widthAnchor.constraint(equalToConstant: 100),
-                nextButton.topAnchor.constraint(equalTo: modeButton.bottomAnchor, constant: 50),
-                nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                nextButton.heightAnchor.constraint(equalToConstant: 50),
-                nextButton.widthAnchor.constraint(equalToConstant: 100)
-            ]
-        )
-    }
-    
-    @objc func modeButtonTapped() {
+    func modeButtonTapped() {
         pushMode.toggle()
         modeLabel.text = pushMode ? "푸시 모드" : "모달 모드"
     }
     
-    @objc func nextButtonTapped() {
+    func nextButtonTapped() {
         let nextViewController = DetailViewController()
         if pushMode {
             nextViewController.dataBind(
@@ -109,7 +86,38 @@ final class ViewController: UIViewController {
             )
             self.present(nextViewController, animated: true)
         }
-        
+    }
+    
+}
+
+private extension ViewController {
+    
+    func setStyle() {
+        self.view.backgroundColor = .white
+    }
+    
+    func setUI() {
+        [modeLabel, nextButton, modeButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            self.view.addSubview($0)
+        }
+    }
+    
+    func setLayout() {
+        NSLayoutConstraint.activate(
+            [
+                modeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
+                modeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                modeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                modeButton.topAnchor.constraint(equalTo: modeLabel.bottomAnchor, constant: 50),
+                modeButton.heightAnchor.constraint(equalToConstant: 50),
+                modeButton.widthAnchor.constraint(equalToConstant: 100),
+                nextButton.topAnchor.constraint(equalTo: modeButton.bottomAnchor, constant: 50),
+                nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                nextButton.heightAnchor.constraint(equalToConstant: 50),
+                nextButton.widthAnchor.constraint(equalToConstant: 100)
+            ]
+        )
     }
     
 }
