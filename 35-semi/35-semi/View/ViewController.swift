@@ -23,6 +23,7 @@ final class ViewController: UIViewController {
         let button = UIButton()
         button.setTitle("다음", for: .normal)
         button.backgroundColor = .tintColor
+        button.layer.cornerRadius = 10
         button.setTitleColor(
             .white,
             for: .normal
@@ -35,20 +36,16 @@ final class ViewController: UIViewController {
         return button
     }()
     
-    private lazy var modeButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("모드 변경", for: .normal)
-        button.backgroundColor = .tintColor
-        button.setTitleColor(
-            .white,
-            for: .normal
-        )
-        button.addTarget(
+    private lazy var modeController: UISegmentedControl = {
+        let controller = UISegmentedControl(items: ["푸시 모드", "모달 모드"])
+        controller.selectedSegmentIndex = pushMode ? 0 : 1
+        controller.addTarget(
             self,
-            action: #selector(modeButtonTapped), for: .touchUpInside
+            action: #selector(modeButtonTapped),
+            for: .valueChanged
         )
         
-        return button
+        return controller
     }()
     
     override func viewDidLoad() {
@@ -97,7 +94,7 @@ private extension ViewController {
     }
     
     func setUI() {
-        [modeLabel, nextButton, modeButton].forEach {
+        [modeLabel, nextButton, modeController].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             self.view.addSubview($0)
         }
@@ -108,11 +105,11 @@ private extension ViewController {
             [
                 modeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
                 modeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                modeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                modeButton.topAnchor.constraint(equalTo: modeLabel.bottomAnchor, constant: 50),
-                modeButton.heightAnchor.constraint(equalToConstant: 50),
-                modeButton.widthAnchor.constraint(equalToConstant: 100),
-                nextButton.topAnchor.constraint(equalTo: modeButton.bottomAnchor, constant: 50),
+                modeController.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                modeController.topAnchor.constraint(equalTo: modeLabel.bottomAnchor, constant: 50),
+                modeController.heightAnchor.constraint(equalToConstant: 50),
+                modeController.widthAnchor.constraint(equalToConstant: 300),
+                nextButton.topAnchor.constraint(equalTo: modeController.bottomAnchor, constant: 50),
                 nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 nextButton.heightAnchor.constraint(equalToConstant: 50),
                 nextButton.widthAnchor.constraint(equalToConstant: 100)
