@@ -23,6 +23,7 @@ final class ViewController: UIViewController {
         let button = UIButton()
         button.setTitle("다음", for: .normal)
         button.backgroundColor = .tintColor
+        button.layer.cornerRadius = 10
         button.setTitleColor(
             .white,
             for: .normal
