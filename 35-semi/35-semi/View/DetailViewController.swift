@@ -45,18 +45,39 @@ final class DetailViewController: UIViewController {
         setLayout()
     }
     
-    private func setStyle() {
+    func dataBind(
+        title: String,
+        content: String
+    ) {
+        self.receivedTitle = title
+        self.receivedContent = content
+        updateUI()
+    }
+    
+    @objc func backButtonTapped() {
+        if self.navigationController == nil {
+            self.dismiss(animated: true)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+}
+
+private extension DetailViewController {
+    
+    func setStyle() {
         self.view.backgroundColor = .lightGray
     }
     
-    private func setUI() {
+    func setUI() {
         [titleLabel, contentLabel, backButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             self.view.addSubview($0)
         }
     }
     
-    private func setLayout() {
+    func setLayout() {
         NSLayoutConstraint.activate(
             [
                 titleLabel.topAnchor.constraint(
@@ -80,26 +101,9 @@ final class DetailViewController: UIViewController {
         )
     }
     
-    private func updateUI() {
+    func updateUI() {
         self.titleLabel.text = receivedTitle
         self.contentLabel.text = receivedContent
-    }
-    
-    func dataBind(
-        title: String,
-        content: String
-    ) {
-        self.receivedTitle = title
-        self.receivedContent = content
-        updateUI()
-    }
-    
-    @objc func backButtonTapped() {
-        if self.navigationController == nil {
-            self.dismiss(animated: true)
-        } else {
-            self.navigationController?.popViewController(animated: true)
-        }
     }
     
 }
