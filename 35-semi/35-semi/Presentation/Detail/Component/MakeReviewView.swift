@@ -103,12 +103,8 @@ final class MakeReviewView: BaseView {
     
     @objc func starButtonTapped(_ sender: UIButton) {
         let index = sender.tag
-        for i in 0..<5 {
-            if i <= index {
-                starButtonList[i].isSelected = true
-            } else {
-                starButtonList[i].isSelected = false
-            }
+        starButtonList.enumerated().forEach { (i, button) in
+            button.isSelected = i <= index
         }
     }
     

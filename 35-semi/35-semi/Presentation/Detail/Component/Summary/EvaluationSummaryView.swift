@@ -1,5 +1,5 @@
 //
-//  EvaluationSummaryCell.swift
+//  EvaluationSummaryView.swift
 //  35-semi
 //
 //  Created by 조성민 on 10/16/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class EvaluationSummaryCell: BaseView {
+final class EvaluationSummaryView: BaseView {
     
     private let countLabel: UILabel = {
         let label = UILabel()
@@ -108,7 +108,7 @@ final class EvaluationSummaryCell: BaseView {
 
 #Preview
 {
-    let cell = EvaluationSummaryCell(evaluationCountString: "3.6만", score: 4.4)
+    let cell = EvaluationSummaryView(evaluationCountString: "3.6만", score: 4.4)
     cell.snp.makeConstraints { make in
         make.width.equalTo(100)
         make.height.equalTo(200)

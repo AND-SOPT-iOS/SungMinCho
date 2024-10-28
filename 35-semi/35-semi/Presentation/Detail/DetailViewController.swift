@@ -34,8 +34,8 @@ final class DetailViewController: BaseViewController {
         return summaryStackView
     }()
     
-    private lazy var evaluationSummaryCell: EvaluationSummaryCell = {
-        let evaluationSummaryCell = EvaluationSummaryCell(
+    private lazy var evaluationSummaryCell: EvaluationSummaryView = {
+        let evaluationSummaryCell = EvaluationSummaryView(
             evaluationCountString: detail.reviewDistribution.translatedTotalCountString,
             score: detail.reviewDistribution.averageScore
         )
@@ -43,14 +43,14 @@ final class DetailViewController: BaseViewController {
         return evaluationSummaryCell
     }()
     
-    private lazy var awardSummaryCell: AwardSummaryCell = {
-        let awardSummaryCell = AwardSummaryCell(award: detail.award)
+    private lazy var awardSummaryCell: AwardSummaryView = {
+        let awardSummaryCell = AwardSummaryView(award: detail.award)
         
         return awardSummaryCell
     }()
     
-    private lazy var ageLimitSummaryCell: AgeLimitSummaryCell = {
-        let agelimitSummaryCell = AgeLimitSummaryCell(ageLimit: detail.ageLimit)
+    private lazy var ageLimitSummaryCell: AgeLimitSummaryView = {
+        let agelimitSummaryCell = AgeLimitSummaryView(ageLimit: detail.ageLimit)
         
         return agelimitSummaryCell
     }()

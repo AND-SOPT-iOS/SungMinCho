@@ -1,61 +1,63 @@
 //
-//  AgeLimitSummaryCell.swift
+//  AwardSummaryView.swift
 //  35-semi
 //
-//  Created by 조성민 on 10/17/24.
+//  Created by 조성민 on 10/16/24.
 //
 
 import UIKit
 
-final class AgeLimitSummaryCell: BaseView {
+final class AwardSummaryView: BaseView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "연령"
         label.font = .systemFont(ofSize: 12)
         label.textColor = .secondaryLabel
         
         return label
     }()
     
-    private let ageLimitLabel: UILabel = {
+    private let awardImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = .secondaryLabel
+        
+        return imageView
+    }()
+    
+    private let typeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.font = .systemFont(ofSize: 12)
         label.textColor = .secondaryLabel
         
         return label
     }()
     
-    private let generationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "세"
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .secondaryLabel
-
-        return label
-    }()
-    
-    init(ageLimit: Int) {
+    init(award: Award) {
         super.init(frame: .zero)
         setStyle()
         setUI()
         setLayout()
-        updateView(ageLimit: ageLimit)
+        updateUI(award: award)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func updateView(ageLimit: Int) {
-        ageLimitLabel.text = "\(ageLimit)+"
+    private func updateUI(award: Award) {
+        switch award {
+        case .editorChoice:
+            titleLabel.text = "수상"
+            awardImageView.image = UIImage(systemName: "person")
+            typeLabel.text = "앱"
+        }
     }
     
     override func setUI() {
         [
             titleLabel,
-            ageLimitLabel,
-            generationLabel
+            awardImageView,
+            typeLabel
         ].forEach {
             addSubview($0)
         }
@@ -67,12 +69,12 @@ final class AgeLimitSummaryCell: BaseView {
             $0.top.equalTo(snp.top)
         }
         
-        ageLimitLabel.snp.makeConstraints {
+        awardImageView.snp.makeConstraints {
             $0.centerX.equalTo(snp.centerX)
             $0.centerY.equalTo(snp.centerY)
         }
         
-        generationLabel.snp.makeConstraints {
+        typeLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
@@ -82,10 +84,5 @@ final class AgeLimitSummaryCell: BaseView {
 
 #Preview
 {
-    let cell = AgeLimitSummaryCell(ageLimit: 10)
-    cell.snp.makeConstraints { make in
-        make.width.equalTo(100)
-        make.height.equalTo(200)
-    }
-    return cell
+    AwardSummaryView(award: .editorChoice)
 }
