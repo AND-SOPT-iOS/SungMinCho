@@ -89,10 +89,10 @@ final class DetailViewController: BaseViewController {
     }()
     
     private lazy var makeReviewView: MakeReviewView? = {
-        if let bestReview = detail.bestReviews.first {
-            return MakeReviewView(bestReview: bestReview)
-        } else {
+        if detail.bestReviews.isEmpty {
             return nil
+        } else {
+            return MakeReviewView(bestReviews: detail.bestReviews)
         }
     }()
     
@@ -298,17 +298,7 @@ extension DetailViewController: EvaluationWithReviewViewDelegate {
 • 그리고 마음까지, 간단한 메시지와 이모티콘을 함께 보내보 세요.
 """,
             developer: "Viva Republica",
-            bestReviews: [
-                Review(
-                    writer: "조성민",
-                    writeDate: Date(),
-                    title: "제목은 제목입니다",
-                    score: Score.four,
-                    content: """
-                    동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람 대한으로 길이 보전하세
-                    """
-                )
-            ],
+            bestReviews: Review.sampleReviews,
             reviewDistribution: ReviewDistribution(
                 five: 58800,
                 four: 10920,

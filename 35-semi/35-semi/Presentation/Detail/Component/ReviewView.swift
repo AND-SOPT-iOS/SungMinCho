@@ -17,6 +17,8 @@ final class ReviewView: BaseView {
     
     private let contentView: UIView = {
         let view = UIView()
+        view.layer.cornerRadius = 10
+        view.backgroundColor = .systemGray6
         
         return view
     }()
@@ -224,8 +226,8 @@ final class ReviewView: BaseView {
     }
 
     override func setStyle() {
-        layer.cornerRadius = 10
-        backgroundColor = .systemGray6
+//        layer.cornerRadius = 10
+//        backgroundColor = .systemGray6
     }
     
     override func setUI() {
@@ -271,7 +273,7 @@ final class ReviewView: BaseView {
     
     override func setLayout() {
         stackView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.top.leading.trailing.bottom.equalToSuperview().inset(4)
         }
         
         contentView.snp.makeConstraints {

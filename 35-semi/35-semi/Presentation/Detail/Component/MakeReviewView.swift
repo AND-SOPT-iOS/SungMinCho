@@ -59,8 +59,25 @@ final class MakeReviewView: BaseView {
         return stackView
     }()
     
-    private lazy var reviewView: ReviewView = {
-        let view = ReviewView(review: bestReview)
+    private let reviewStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .top
+        
+        return stackView
+    }()
+    
+    private let reviewViewPageView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.isPagingEnabled = true
+        
+        return scrollView
+    }()
+    
+    private lazy var reviewViews: [ReviewView] = {
+        let view: [ReviewView] = bestReviews.map { ReviewView(review: $0) }
         
         return view
     }()
@@ -87,10 +104,10 @@ final class MakeReviewView: BaseView {
         return button
     }()
     
-    private let bestReview: Review
+    private let bestReviews: [Review]
     
-    init(bestReview: Review) {
-        self.bestReview = bestReview
+    init(bestReviews: [Review]) {
+        self.bestReviews = bestReviews
         super.init(frame: .zero)
         setStyle()
         setUI()
@@ -109,6 +126,12 @@ final class MakeReviewView: BaseView {
     }
     
     override func setUI() {
+        reviewViews.forEach {
+            reviewStackView.addArrangedSubview($0)
+        }
+        
+        reviewViewPageView.addSubview(reviewStackView)
+        
         starButtonList.forEach {
             starStackView.addArrangedSubview($0)
         }
@@ -116,7 +139,7 @@ final class MakeReviewView: BaseView {
         [
             headerLabel,
             starStackView,
-            reviewView,
+            reviewViewPageView,
             writeReviewButton,
             applicationSupportButton
         ].forEach {
@@ -134,18 +157,29 @@ final class MakeReviewView: BaseView {
             $0.centerY.equalTo(starStackView)
         }
         
-        reviewView.snp.makeConstraints {
+        reviewStackView.snp.makeConstraints {
+            $0.edges.equalTo(reviewViewPageView)
+        }
+        
+        reviewViewPageView.snp.makeConstraints {
             $0.top.equalTo(headerLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(reviewStackView.snp.height)
+        }
+        
+        reviewViews.forEach { reviewView in
+            reviewView.snp.makeConstraints {
+                $0.width.equalTo(snp.width)
+            }
         }
         
         writeReviewButton.snp.makeConstraints {
-            $0.top.equalTo(reviewView.snp.bottom).offset(20)
+            $0.top.equalTo(reviewViewPageView.snp.bottom).offset(20)
             $0.leading.equalToSuperview()
         }
         
         applicationSupportButton.snp.makeConstraints {
-            $0.top.equalTo(reviewView.snp.bottom).offset(20)
+            $0.top.equalTo(reviewViewPageView.snp.bottom).offset(20)
             $0.trailing.equalToSuperview()
         }
     }
@@ -155,14 +189,6 @@ final class MakeReviewView: BaseView {
 #Preview
 {
     MakeReviewView(
-        bestReview: Review(
-            writer: "조성민",
-            writeDate: Date(),
-            title: "폰트 크기 복구해주세요.....",
-            score: Score.four,
-            content: "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC",
-            developerAnswer: "그랬구나~",
-            devleoperAnswerDate: Date()
-        )
+        bestReviews: Review.sampleReviews
     )
 }
