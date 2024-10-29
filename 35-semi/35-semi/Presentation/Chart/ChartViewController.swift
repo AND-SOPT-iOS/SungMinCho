@@ -44,7 +44,7 @@ final class ChartViewController: BaseViewController {
 extension ChartViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let tossIndex = App.sampleApps.firstIndex(where: {$0.title == "토스"}) {
+        if let tossIndex = App.financialApps.firstIndex(where: {$0.title == "토스"}) {
             if tossIndex == indexPath.row {
                 let nextViewController = DetailViewController(
                     detail: AppDetail.sampleAppDetail
@@ -59,14 +59,14 @@ extension ChartViewController: UITableViewDelegate {
 extension ChartViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return App.sampleApps.count
+        return App.financialApps.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ChartTableViewCell.identifier, for: indexPath) as? ChartTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(app: App.sampleApps[indexPath.row])
+        cell.configure(app: App.financialApps[indexPath.row])
         return cell
     }
     

@@ -39,7 +39,8 @@ struct App {
 }
 
 extension App {
-    static let sampleApps: [App] = [
+    
+    static let financialApps: [App] = [
         App(
             title: "현대카드",
             rank: 1,
@@ -134,4 +135,5 @@ extension App {
             imageName: "toss"
         )
     ]
+    
 }

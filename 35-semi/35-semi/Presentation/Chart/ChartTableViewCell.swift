@@ -156,7 +156,7 @@ final class ChartTableViewCell: UITableViewCell {
             $0.width.equalTo(400)
             $0.height.equalTo(92)
         }
-        cell.configure(app: App.sampleApps[3])
+        cell.configure(app: App.financialApps[3])
         return cell
     }()
     cell1
