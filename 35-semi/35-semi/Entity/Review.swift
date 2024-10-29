@@ -81,7 +81,7 @@ extension Review {
             writeDate: Date(),
             title: "디자인이 마음에 들어요",
             score: Score.four,
-            content: "디자인이 깔끔하고 좋습니다. 색상 조합도 마음에 들고, 사용하기에도 편리합니다. 앞으로도 이런 디자인을 유지해 주셨으면 좋겠어요.",
+            content: "디자인이 깔끔하고 좋습니다. 색상 조합도 마음에 들고, 사용하기에도 편리합니다.",
             developerAnswer: nil,
             devleoperAnswerDate: nil
         )

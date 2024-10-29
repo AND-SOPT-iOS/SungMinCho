@@ -178,6 +178,16 @@ final class ReviewView: BaseView {
         
         contentMoreLabelLeftView.layer.sublayers?.first?.frame = contentMoreLabelLeftView.bounds
         answerMoreLabelLeftView.layer.sublayers?.first?.frame = answerMoreLabelLeftView.bounds
+        
+        if !contentLabel.isTruncated {
+            contentMoreLabel.removeFromSuperview()
+            contentMoreLabelLeftView.removeFromSuperview()
+        }
+        
+        if !answerContentLabel.isTruncated {
+            answerMoreLabel.removeFromSuperview()
+            answerMoreLabelLeftView.removeFromSuperview()
+        }
     }
     
     private func updateUI(review: Review) {
@@ -202,15 +212,6 @@ final class ReviewView: BaseView {
                 imageView.image = UIImage(systemName: "star")
             }
         }
-        if !contentLabel.isTruncated {
-            contentMoreLabel.removeFromSuperview()
-            contentMoreLabelLeftView.removeFromSuperview()
-        }
-        
-        if !answerContentLabel.isTruncated {
-            answerMoreLabel.removeFromSuperview()
-            answerMoreLabelLeftView.removeFromSuperview()
-        }
     }
     
     @objc func contentMoreLabelTapped() {
@@ -225,10 +226,7 @@ final class ReviewView: BaseView {
         answerMoreLabelLeftView.removeFromSuperview()
     }
 
-    override func setStyle() {
-//        layer.cornerRadius = 10
-//        backgroundColor = .systemGray6
-    }
+    override func setStyle() { }
     
     override func setUI() {
         [
@@ -379,12 +377,7 @@ final class ReviewView: BaseView {
             writeDate: Date(),
             title: "폰트 크기 복구해주세요.....",
             score: Score.four,
-            content: """
-오늘 토스가 어쩌구 저쩌구 오늘 토스가
-어쩌구 저쩌구 오늘 토스가 어쩌구 저쩌구 오늘 토스가 어쩌구
-저쩌구 오늘 토스가 어쩌구 저쩌구 오늘 토스가 어쩌구 저쩌구
-오늘 토스가 어쩌구 저쩌구 오늘 토스가 어쩌구 저쩌구 오늘
-""",
+            content: "오늘 토스가 어쩌구 저쩌구 오늘 토스가 오늘 토스가 어쩌구 저쩌구 오늘 토스가 오늘 토스가 어쩌구 저쩌구 오늘 토스가 오늘 토스가 어쩌구 저쩌구",
             developerAnswer: "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC",
             devleoperAnswerDate: Date()
         )
