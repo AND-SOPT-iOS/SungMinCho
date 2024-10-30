@@ -192,7 +192,6 @@ final class DetailViewController: BaseViewController {
             $0.height.equalTo(160)
         }
         
-        // TODO: previewScreenshot 레이아웃 수정
         previewScreenshotView.snp.makeConstraints {
             $0.top.equalTo(newsView.snp.bottom).offset(20)
             $0.leading.trailing.equalTo(scrollViewContentView)
