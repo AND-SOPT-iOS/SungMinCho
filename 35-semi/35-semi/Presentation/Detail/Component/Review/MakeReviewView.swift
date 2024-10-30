@@ -63,13 +63,19 @@ final class MakeReviewView: BaseView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 0
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.isScrollEnabled = true
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.clipsToBounds = true
         collectionView.register(ReviewCollectionViewCell.self, forCellWithReuseIdentifier: ReviewCollectionViewCell.identifier)
-        collectionView.isPagingEnabled = true
+        collectionView.isPagingEnabled = false
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.decelerationRate = .fast
+        collectionView.contentInset = .init(top: 0, left: 20, bottom: 0, right: 10)
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -187,9 +193,24 @@ extension MakeReviewView: UICollectionViewDataSource {
 
 extension MakeReviewView: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         
-        return CGSize(width: collectionView.bounds.width - 10, height: 250)
+        return CGSize(width: collectionView.bounds.width - 40, height: 250)
+    }
+    
+    func scrollViewWillEndDragging(
+        _ scrollView: UIScrollView,
+        withVelocity velocity: CGPoint,
+        targetContentOffset: UnsafeMutablePointer<CGPoint>
+    ) {
+        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
+        let cellWidth = scrollView.bounds.width - 30
+        let index = round(scrolledOffsetX / cellWidth)
+        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
     }
     
 }
