@@ -59,27 +59,21 @@ final class MakeReviewView: BaseView {
         return stackView
     }()
     
-    private let reviewStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .top
+    private lazy var reviewCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
         
-        return stackView
-    }()
-    
-    private let reviewViewPageView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.isPagingEnabled = true
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.register(ReviewCollectionViewCell.self, forCellWithReuseIdentifier: ReviewCollectionViewCell.identifier)
+        collectionView.isPagingEnabled = true
+        collectionView.dataSource = self
+        collectionView.delegate = self
         
-        return scrollView
-    }()
-    
-    private lazy var reviewViews: [ReviewView] = {
-        let view: [ReviewView] = bestReviews.map { ReviewView(review: $0) }
-        
-        return view
+        return collectionView
     }()
     
     private let writeReviewButton: UIButton = {
@@ -126,12 +120,6 @@ final class MakeReviewView: BaseView {
     }
     
     override func setUI() {
-        reviewViews.forEach {
-            reviewStackView.addArrangedSubview($0)
-        }
-        
-        reviewViewPageView.addSubview(reviewStackView)
-        
         starButtonList.forEach {
             starStackView.addArrangedSubview($0)
         }
@@ -139,7 +127,7 @@ final class MakeReviewView: BaseView {
         [
             headerLabel,
             starStackView,
-            reviewViewPageView,
+            reviewCollectionView,
             writeReviewButton,
             applicationSupportButton
         ].forEach {
@@ -157,31 +145,51 @@ final class MakeReviewView: BaseView {
             $0.centerY.equalTo(starStackView)
         }
         
-        reviewStackView.snp.makeConstraints {
-            $0.edges.equalTo(reviewViewPageView)
-        }
-        
-        reviewViewPageView.snp.makeConstraints {
+        reviewCollectionView.snp.makeConstraints {
             $0.top.equalTo(headerLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(reviewStackView.snp.height)
-        }
-        
-        reviewViews.forEach { reviewView in
-            reviewView.snp.makeConstraints {
-                $0.width.equalTo(snp.width)
-            }
+            $0.height.equalTo(250)
         }
         
         writeReviewButton.snp.makeConstraints {
-            $0.top.equalTo(reviewViewPageView.snp.bottom).offset(20)
+            $0.top.equalTo(reviewCollectionView.snp.bottom).offset(20)
             $0.leading.equalToSuperview()
         }
         
         applicationSupportButton.snp.makeConstraints {
-            $0.top.equalTo(reviewViewPageView.snp.bottom).offset(20)
+            $0.top.equalTo(reviewCollectionView.snp.bottom).offset(20)
             $0.trailing.equalToSuperview()
         }
+    }
+    
+}
+
+extension MakeReviewView: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Review.sampleReviews.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCollectionViewCell.identifier, for: indexPath) as? ReviewCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.configure(review: Review.sampleReviews[indexPath.row])
+        
+        return cell
+    }
+    
+}
+
+extension MakeReviewView: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return CGSize(width: collectionView.bounds.width - 10, height: 250)
     }
     
 }
