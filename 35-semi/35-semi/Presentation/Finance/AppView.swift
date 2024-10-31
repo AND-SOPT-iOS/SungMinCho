@@ -72,6 +72,7 @@ final class AppView: BaseView {
         ].forEach {
             addSubview($0)
         }
+        
         [
             titleLabel,
             subtitleLabel
@@ -86,7 +87,8 @@ final class AppView: BaseView {
     
     override func setLayout() {
         iconImageView.snp.makeConstraints {
-            $0.top.leading.bottom.equalToSuperview().inset(12)
+            $0.top.equalToSuperview().inset(12)
+            $0.leading.bottom.equalToSuperview()
             $0.width.equalTo(iconImageView.snp.height)
         }
         
