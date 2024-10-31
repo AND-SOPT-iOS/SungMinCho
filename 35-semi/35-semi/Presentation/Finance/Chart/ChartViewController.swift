@@ -13,7 +13,7 @@ final class ChartViewController: BaseViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ChartTableViewCell.self, forCellReuseIdentifier: ChartTableViewCell.identifier)
+        tableView.register(ChartTableViewCell.self, forCellReuseIdentifier: ChartTableViewCell.cellIdentifier)
         tableView.rowHeight = 100
         
         return tableView
@@ -67,7 +67,7 @@ extension ChartViewController: UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: ChartTableViewCell.identifier,
+            withIdentifier: ChartTableViewCell.cellIdentifier,
             for: indexPath
         ) as? ChartTableViewCell else {
             return UITableViewCell()
