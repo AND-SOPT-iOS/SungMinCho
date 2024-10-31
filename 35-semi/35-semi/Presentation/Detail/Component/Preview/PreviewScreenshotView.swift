@@ -21,7 +21,11 @@ final class PreviewScreenshotView: BaseView {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.clipsToBounds = true
-        collectionView.register(PreviewCollectionViewCell.self, forCellWithReuseIdentifier: PreviewCollectionViewCell.identifier)
+        collectionView
+            .register(
+                PreviewCollectionViewCell.self,
+                forCellWithReuseIdentifier: PreviewCollectionViewCell.cellIdentifier
+            )
         collectionView.isPagingEnabled = false
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.decelerationRate = .fast
@@ -118,7 +122,7 @@ extension PreviewScreenshotView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PreviewCollectionViewCell.identifier, for: indexPath) as? PreviewCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PreviewCollectionViewCell.cellIdentifier, for: indexPath) as? PreviewCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(image: UIImage.mockImages[indexPath.row])
@@ -134,8 +138,7 @@ extension PreviewScreenshotView: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        
-        return CGSize(width: 220, height: 400)
+        CGSize(width: 220, height: 400)
     }
     
     func scrollViewWillEndDragging(
@@ -146,7 +149,10 @@ extension PreviewScreenshotView: UICollectionViewDelegateFlowLayout {
         let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
         let cellWidth = 230.0
         let index = round(scrolledOffsetX / cellWidth)
-        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
+        targetContentOffset.pointee = CGPoint(
+            x: index * cellWidth - scrollView.contentInset.left,
+            y: scrollView.contentInset.top
+        )
     }
     
 }

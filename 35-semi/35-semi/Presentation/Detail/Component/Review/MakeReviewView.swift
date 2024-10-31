@@ -71,7 +71,10 @@ final class MakeReviewView: BaseView {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.clipsToBounds = true
-        collectionView.register(ReviewCollectionViewCell.self, forCellWithReuseIdentifier: ReviewCollectionViewCell.identifier)
+        collectionView.register(
+            ReviewCollectionViewCell.self,
+            forCellWithReuseIdentifier: ReviewCollectionViewCell.cellIdentifier
+        )
         collectionView.isPagingEnabled = false
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.decelerationRate = .fast
@@ -181,7 +184,10 @@ extension MakeReviewView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCollectionViewCell.identifier, for: indexPath) as? ReviewCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ReviewCollectionViewCell.cellIdentifier,
+            for: indexPath
+        ) as? ReviewCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(review: Review.sampleReviews[indexPath.row])
