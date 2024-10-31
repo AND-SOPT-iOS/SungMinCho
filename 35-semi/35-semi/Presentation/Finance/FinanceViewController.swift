@@ -10,37 +10,23 @@ import UIKit
 final class FinanceViewController: BaseViewController {
     
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 0
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.isScrollEnabled = true
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.clipsToBounds = true
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: FinanceCollectionViewCompositionalLayoutFactory.createLayout()
+        )
         collectionView.register(
             FinanceMainCollectionViewCell.self,
-            forCellWithReuseIdentifier: FinanceMainCollectionViewCell.identifier
+            forCellWithReuseIdentifier: FinanceMainCollectionViewCell.cellIdentifier
         )
         collectionView.register(
-            FinanceEssentialCollectionViewCell.self,
-            forCellWithReuseIdentifier: FinanceEssentialCollectionViewCell.identifier
+            FinanceAppCollectionViewCell.self,
+            forCellWithReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier
         )
         collectionView.register(
-            FinancePaidRankingCollectionViewCell.self,
-            forCellWithReuseIdentifier: FinancePaidRankingCollectionViewCell.identifier
+            FinanceAppCollectionViewHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: FinanceAppCollectionViewHeaderView.headerIdentifier
         )
-        collectionView.register(
-            FinanceFreeRankingCollectionViewCell.self,
-            forCellWithReuseIdentifier: FinanceFreeRankingCollectionViewCell.identifier
-        )
-        collectionView.isPagingEnabled = false
-        collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.decelerationRate = .fast
-        collectionView.contentInset = .init(top: 0, left: 20, bottom: 0, right: 10)
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -79,7 +65,10 @@ extension FinanceViewController: UICollectionViewDataSource {
         return 4
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         switch section {
         case 0:
             return 4
@@ -88,59 +77,101 @@ extension FinanceViewController: UICollectionViewDataSource {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceMainCollectionViewCell.identifier, for: indexPath) as? FinanceMainCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceMainCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceMainCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            cell.configure(model: FinanceMainCellModel.mockModels[indexPath.row])
             return cell
         case 1:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceEssentialCollectionViewCell.identifier, for: indexPath) as? FinanceEssentialCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceAppCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            cell.configure(app: App.financialEssencialApps[indexPath.row])
             return cell
         case 2:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinancePaidRankingCollectionViewCell.identifier, for: indexPath) as? FinancePaidRankingCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceAppCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            cell.configure(app: App.financialPaidApps[indexPath.row])
             return cell
         case 3:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceFreeRankingCollectionViewCell.identifier, for: indexPath) as? FinanceFreeRankingCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceAppCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            cell.configure(app: App.financialFreeApps[indexPath.row])
             return cell
         default:
             return UICollectionViewCell()
         }
     }
     
-}
-
-extension FinanceViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(
         _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        
         switch indexPath.section {
-        case 0:
-            return CGSize(width: collectionView.bounds.width, height: 200)
+        case 1:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: FinanceAppCollectionViewHeaderView.headerIdentifier,
+                for: indexPath
+            ) as? FinanceAppCollectionViewHeaderView else {
+                return UICollectionReusableView()
+            }
+            headerView.configure(title: "필수 금융 앱", subtitle: "App Store 에디터가 직접 골랐습니다")
+            headerView.delegate = self
+            return headerView
+        case 2:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: FinanceAppCollectionViewHeaderView.headerIdentifier,
+                for: indexPath
+            ) as? FinanceAppCollectionViewHeaderView else {
+                return UICollectionReusableView()
+            }
+            headerView.configure(title: "유료 순위")
+            headerView.delegate = self
+            return headerView
+        case 3:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: FinanceAppCollectionViewHeaderView.headerIdentifier,
+                for: indexPath
+            ) as? FinanceAppCollectionViewHeaderView else {
+                return UICollectionReusableView()
+            }
+            headerView.configure(title: "무료 순위")
+            headerView.delegate = self
+            return headerView
         default:
-            return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height / 3)
+            return UICollectionReusableView()
         }
     }
     
-    func scrollViewWillEndDragging(
-        _ scrollView: UIScrollView,
-        withVelocity velocity: CGPoint,
-        targetContentOffset: UnsafeMutablePointer<CGPoint>
-    ) {
-        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
-        let cellWidth = scrollView.bounds.width
-        let index = round(scrolledOffsetX / cellWidth)
-        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
+}
+
+extension FinanceViewController: FinanceAppCollectionViewHeaderViewDelegate {
+    
+    func showAllButtonTapped(viewType: HeaderViewType) {
+        switch viewType {
+        case .essential:
+            let nextViewController = ChartViewController()
+            navigationController?.pushViewController(nextViewController, animated: true)
+        case .paid:
+            let nextViewController = ChartViewController()
+            navigationController?.pushViewController(nextViewController, animated: true)
+        case .free:
+            let nextViewController = ChartViewController()
+            navigationController?.pushViewController(nextViewController, animated: true)
+        }
     }
     
 }
