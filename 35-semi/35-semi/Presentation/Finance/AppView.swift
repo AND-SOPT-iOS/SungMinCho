@@ -115,6 +115,7 @@ extension AppView {
         titleLabel.text = ""
         subtitleLabel.text = ""
         rankLabel.text = ""
+        rankLabel.isHidden = false
         iconImageView.image = nil
         downloadStateButton.setImage(nil, for: .normal)
         downloadStateButton.configuration = nil
@@ -123,7 +124,11 @@ extension AppView {
     func updateUI(app: App) {
         titleLabel.text = app.title
         subtitleLabel.text = app.subtitle
-        rankLabel.text = "\(app.rank)"
+        if let rank = app.rank {
+            rankLabel.text = "\(rank)"
+        } else {
+            rankLabel.isHidden = true
+        }
         iconImageView.image = UIImage(named: app.imageName)
         if app.downloadState == .reDownloadable {
             let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold)

@@ -11,7 +11,7 @@ struct App {
     
     let title: String
     let subtitle: String
-    let rank: Int
+    let rank: Int?
     let downloadState: DownloadState
     let category: Category
     let imageName: String
@@ -20,7 +20,7 @@ struct App {
     init(
         title: String,
         subtitle: String? = nil,
-        rank: Int,
+        rank: Int? = nil,
         downloadState: DownloadState,
         category: Category,
         imageName: String,
@@ -161,6 +161,35 @@ extension App {
             category: .finance,
             imageName: "toss"
         )
+    ]
+    static let financialMainApps: [App] = [
+        App(
+            title: "현대카드",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "hyundaicard"
+        ),
+        App(
+            title: "현대백화점",
+            downloadState: .updatable,
+            category: .finance,
+            imageName: "hyundaidepartment"
+        ),
+        App(
+            title: "카카오뱅크",
+            subtitle: "이미 모두의 은행",
+            downloadState: .downloaded,
+            category: .finance,
+            imageName: "kakaobank"
+        ),
+        App(
+            title: "카카오페이",
+            subtitle: "마음 놓고 금융하다",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "kakaopay",
+            price: 100000
+        ),
     ]
     
 }
