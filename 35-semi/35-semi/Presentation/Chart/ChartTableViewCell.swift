@@ -107,7 +107,7 @@ final class ChartTableViewCell: UITableViewCell {
         downloadStateButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
-            $0.width.equalTo(88)
+            $0.width.greaterThanOrEqualTo(88)
         }
         
         rankLabel.snp.makeConstraints {
@@ -142,7 +142,7 @@ final class ChartTableViewCell: UITableViewCell {
             configuration.baseForegroundColor = .tintColor
             downloadStateButton.configuration = configuration
             downloadStateButton.configuration?.cornerStyle = .capsule
-            downloadStateButton.configuration?.title = app.downloadState.downloadButtonTitle
+            downloadStateButton.configuration?.title = app.downloadButtonTitle
         }
     }
     
@@ -156,7 +156,7 @@ final class ChartTableViewCell: UITableViewCell {
             $0.width.equalTo(400)
             $0.height.equalTo(92)
         }
-        cell.configure(app: App.financialApps[3])
+        cell.configure(app: App.financialApps[1])
         return cell
     }()
     cell1

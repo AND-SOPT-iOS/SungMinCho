@@ -15,6 +15,7 @@ struct App {
     let downloadState: DownloadState
     let category: Category
     let imageName: String
+    let price: Int
     
     init(
         title: String,
@@ -22,7 +23,8 @@ struct App {
         rank: Int,
         downloadState: DownloadState,
         category: Category,
-        imageName: String
+        imageName: String,
+        price: Int = 0
     ) {
         self.title = title
         if let subtitle = subtitle {
@@ -34,6 +36,30 @@ struct App {
         self.downloadState = downloadState
         self.category = category
         self.imageName = imageName
+        self.price = price
+    }
+    
+    var downloadButtonTitle: String? {
+        if price == 0 {
+            switch downloadState {
+            case .updatable:
+                return "업데이트"
+            case .downloadable:
+                return "받기"
+            case .downloaded:
+                return "열기"
+            case .reDownloadable:
+                return nil
+            }
+        } else {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.locale = Locale(identifier: "ko_KR")
+            if let formattedString = formatter.string(from: NSNumber(value: price)) {
+                return "₩\(formattedString)"
+            }
+            return "₩\(price)"
+        }
     }
     
 }
@@ -67,9 +93,10 @@ extension App {
             title: "카카오페이",
             subtitle: "마음 놓고 금융하다",
             rank: 4,
-            downloadState: .reDownloadable,
+            downloadState: .downloadable,
             category: .finance,
-            imageName: "kakaopay"
+            imageName: "kakaopay",
+            price: 100000
         ),
         App(
             title: "케이뱅크",

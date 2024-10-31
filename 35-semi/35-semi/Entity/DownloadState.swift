@@ -12,17 +12,4 @@ enum DownloadState {
     case downloaded
     case reDownloadable
     
-    var downloadButtonTitle: String? {
-        switch self {
-        case .updatable: 
-            return "업데이트"
-        case .downloadable:
-            return "받기"
-        case .downloaded: 
-            return "열기"
-        case .reDownloadable:
-            return nil
-        }
-    }
-    
 }
