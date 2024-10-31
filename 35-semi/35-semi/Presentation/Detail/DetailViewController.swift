@@ -116,7 +116,7 @@ final class DetailViewController: BaseViewController {
         setLayout()
     }
     
-    @objc func backButtonTapped() {
+    @objc private func backButtonTapped() {
         self.navigationController?.popViewController(animated: true)
     }
     

@@ -90,7 +90,7 @@ final class EvaluationWithReviewView: BaseView {
         evaluationCountLabel.text = "\(reviewDistribution.translatedTotalCountString)개의 리뷰"
     }
     
-    @objc func showAllButtonTapped() {
+    @objc private func showAllButtonTapped() {
         delegate?.showAllButtonTapped()
     }
     

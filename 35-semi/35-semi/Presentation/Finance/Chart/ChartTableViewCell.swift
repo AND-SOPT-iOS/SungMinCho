@@ -32,11 +32,7 @@ final class ChartTableViewCell: UITableViewCell {
     }
     
     private func setUI() {
-        [
-            appView
-        ].forEach {
-            contentView.addSubview($0)
-        }
+        contentView.addSubview(appView)
     }
     
     private func setStyle() {
@@ -57,7 +53,7 @@ final class ChartTableViewCell: UITableViewCell {
 
 #Preview
 {
-    let cell1: ChartTableViewCell = {
+    let cell: ChartTableViewCell = {
         let cell = ChartTableViewCell(style: .default, reuseIdentifier: nil)
         cell.snp.makeConstraints {
             $0.width.equalTo(400)
@@ -66,5 +62,5 @@ final class ChartTableViewCell: UITableViewCell {
         cell.configure(app: App.financialApps[1])
         return cell
     }()
-    cell1
+    cell
 }

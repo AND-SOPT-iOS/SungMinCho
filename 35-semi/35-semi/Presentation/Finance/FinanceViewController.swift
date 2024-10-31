@@ -35,7 +35,6 @@ final class FinanceViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setStyle()
         setUI()
         setLayout()
@@ -57,7 +56,7 @@ final class FinanceViewController: BaseViewController {
     
 }
 
-extension FinanceViewController: UICollectionViewDelegate {}
+extension FinanceViewController: UICollectionViewDelegate { }
 
 extension FinanceViewController: UICollectionViewDataSource {
     
@@ -83,25 +82,37 @@ extension FinanceViewController: UICollectionViewDataSource {
     ) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceMainCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceMainCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: FinanceMainCollectionViewCell.cellIdentifier,
+                for: indexPath
+            ) as? FinanceMainCollectionViewCell else {
                 return UICollectionViewCell()
             }
             cell.configure(model: FinanceMainCellModel.mockModels[indexPath.row])
             return cell
         case 1:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceAppCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier,
+                for: indexPath
+            ) as? FinanceAppCollectionViewCell else {
                 return UICollectionViewCell()
             }
             cell.configure(app: App.financialEssencialApps[indexPath.row])
             return cell
         case 2:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceAppCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier,
+                for: indexPath
+            ) as? FinanceAppCollectionViewCell else {
                 return UICollectionViewCell()
             }
             cell.configure(app: App.financialPaidApps[indexPath.row])
             return cell
         case 3:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier, for: indexPath) as? FinanceAppCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: FinanceAppCollectionViewCell.cellIdentifier,
+                for: indexPath
+            ) as? FinanceAppCollectionViewCell else {
                 return UICollectionViewCell()
             }
             cell.configure(app: App.financialFreeApps[indexPath.row])
@@ -116,7 +127,6 @@ extension FinanceViewController: UICollectionViewDataSource {
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
-        
         switch indexPath.section {
         case 1:
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -162,15 +172,11 @@ extension FinanceViewController: FinanceAppCollectionViewHeaderViewDelegate {
     
     func showAllButtonTapped(viewType: HeaderViewType) {
         switch viewType {
-        case .essential:
-            let nextViewController = ChartViewController()
-            navigationController?.pushViewController(nextViewController, animated: true)
-        case .paid:
-            let nextViewController = ChartViewController()
-            navigationController?.pushViewController(nextViewController, animated: true)
         case .free:
             let nextViewController = ChartViewController()
             navigationController?.pushViewController(nextViewController, animated: true)
+        default:
+            break
         }
     }
     

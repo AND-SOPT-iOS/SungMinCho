@@ -26,9 +26,6 @@ final class ChartViewController: BaseViewController {
         setLayout()
     }
     
-    override func setStyle() {
-    }
-    
     override func setUI() {
         view.addSubview(tableView)
     }
@@ -58,12 +55,21 @@ extension ChartViewController: UITableViewDelegate {
 
 extension ChartViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
         return App.financialApps.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChartTableViewCell.identifier, for: indexPath) as? ChartTableViewCell else {
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ChartTableViewCell.identifier,
+            for: indexPath
+        ) as? ChartTableViewCell else {
             return UITableViewCell()
         }
         cell.configure(app: App.financialApps[indexPath.row])

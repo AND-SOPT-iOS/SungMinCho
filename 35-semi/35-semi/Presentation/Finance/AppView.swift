@@ -81,10 +81,6 @@ final class AppView: BaseView {
         }
     }
     
-    override func setStyle() {
-        
-    }
-    
     override func setLayout() {
         iconImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
@@ -109,10 +105,7 @@ final class AppView: BaseView {
             $0.trailing.equalTo(downloadStateButton.snp.leading)
         }
     }
-}
-
-extension AppView {
-
+    
     func resetUI() {
         titleLabel.text = ""
         subtitleLabel.text = ""
@@ -133,7 +126,10 @@ extension AppView {
         }
         iconImageView.image = UIImage(named: app.imageName)
         if app.downloadState == .reDownloadable {
-            let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold)
+            let imageConfiguration = UIImage.SymbolConfiguration(
+                pointSize: 20,
+                weight: .semibold
+            )
             downloadStateButton.setImage(
                 UIImage(
                     systemName: "icloud.and.arrow.down",

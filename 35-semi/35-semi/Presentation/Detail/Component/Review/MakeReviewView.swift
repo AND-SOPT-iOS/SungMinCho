@@ -121,7 +121,7 @@ final class MakeReviewView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func starButtonTapped(_ sender: UIButton) {
+    @objc private func starButtonTapped(_ sender: UIButton) {
         let index = sender.tag
         starButtonList.enumerated().forEach { (i, button) in
             button.isSelected = i <= index
@@ -179,11 +179,17 @@ extension MakeReviewView: UICollectionViewDataSource {
         1
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         return Review.sampleReviews.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: ReviewCollectionViewCell.cellIdentifier,
             for: indexPath
