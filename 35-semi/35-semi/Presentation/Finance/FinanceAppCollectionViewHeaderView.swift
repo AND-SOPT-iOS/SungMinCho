@@ -26,13 +26,16 @@ final class FinanceAppCollectionViewHeaderView: UICollectionReusableView {
         return label
     }()
     
-    private let showAllButton: UIButton = {
+    private lazy var showAllButton: UIButton = {
         let button = UIButton()
         button.setTitle("모두 보기", for: .normal)
         button.setTitleColor(.tintColor, for: .normal)
+        button.addTarget(self, action: #selector(showAllButtonTapped), for: .touchUpInside)
         
         return button
     }()
+    
+    private var viewType: HeaderViewType?
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -48,6 +51,7 @@ final class FinanceAppCollectionViewHeaderView: UICollectionReusableView {
         super.prepareForReuse()
         titleLabel.text = ""
         subtitleLabel.text = ""
+        viewType = nil
     }
     
     private func setUI() {
@@ -77,15 +81,22 @@ final class FinanceAppCollectionViewHeaderView: UICollectionReusableView {
         }
     }
     
-    func configure(title: String, subtitle: String? = nil) {
+    @objc private func showAllButtonTapped() {
+        if viewType == .free {
+            delegate?.showAllButtonTapped()
+        }
+    }
+    
+    func configure(title: String, subtitle: String? = nil, viewType: HeaderViewType) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
+        self.viewType = viewType
     }
     
 }
 
 protocol FinanceAppCollectionViewHeaderViewDelegate: AnyObject {
     
-    func showAllButtonTapped(viewType: HeaderViewType)
+    func showAllButtonTapped()
     
 }

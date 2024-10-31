@@ -136,7 +136,7 @@ extension FinanceViewController: UICollectionViewDataSource {
             ) as? FinanceAppCollectionViewHeaderView else {
                 return UICollectionReusableView()
             }
-            headerView.configure(title: "필수 금융 앱", subtitle: "App Store 에디터가 직접 골랐습니다")
+            headerView.configure(title: "필수 금융 앱", subtitle: "App Store 에디터가 직접 골랐습니다", viewType: .essential)
             headerView.delegate = self
             return headerView
         case 2:
@@ -147,7 +147,7 @@ extension FinanceViewController: UICollectionViewDataSource {
             ) as? FinanceAppCollectionViewHeaderView else {
                 return UICollectionReusableView()
             }
-            headerView.configure(title: "유료 순위")
+            headerView.configure(title: "유료 순위", viewType: .paid)
             headerView.delegate = self
             return headerView
         case 3:
@@ -158,7 +158,7 @@ extension FinanceViewController: UICollectionViewDataSource {
             ) as? FinanceAppCollectionViewHeaderView else {
                 return UICollectionReusableView()
             }
-            headerView.configure(title: "무료 순위")
+            headerView.configure(title: "무료 순위", viewType: .free)
             headerView.delegate = self
             return headerView
         default:
@@ -170,14 +170,9 @@ extension FinanceViewController: UICollectionViewDataSource {
 
 extension FinanceViewController: FinanceAppCollectionViewHeaderViewDelegate {
     
-    func showAllButtonTapped(viewType: HeaderViewType) {
-        switch viewType {
-        case .free:
-            let nextViewController = ChartViewController()
-            navigationController?.pushViewController(nextViewController, animated: true)
-        default:
-            break
-        }
+    func showAllButtonTapped() {
+        let nextViewController = ChartViewController()
+        navigationController?.pushViewController(nextViewController, animated: true)
     }
     
 }
