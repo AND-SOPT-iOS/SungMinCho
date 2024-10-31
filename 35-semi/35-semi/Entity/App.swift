@@ -191,5 +191,203 @@ extension App {
             price: 100000
         ),
     ]
+    static let financialEssencialApps: [App] = [
+        App(
+            title: "현대카드",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "hyundaicard"
+        ),
+        App(
+            title: "현대백화점",
+            downloadState: .updatable,
+            category: .finance,
+            imageName: "hyundaidepartment"
+        ),
+        App(
+            title: "카카오뱅크",
+            subtitle: "이미 모두의 은행",
+            downloadState: .downloaded,
+            category: .finance,
+            imageName: "kakaobank"
+        ),
+        App(
+            title: "카카오페이",
+            subtitle: "마음 놓고 금융하다",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "kakaopay",
+            price: 100000
+        ),
+        App(
+            title: "케이뱅크",
+            subtitle: "make money",
+            downloadState: .reDownloadable,
+            category: .finance,
+            imageName: "kbank"
+        ),
+        App(
+            title: "KBPay",
+            subtitle: "모든 금융을 한번에, 한손에, 한눈에 담다",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "kbpay"
+        ),
+        App(
+            title: "모바일티머니",
+            downloadState: .updatable,
+            category: .finance,
+            imageName: "mobileTmoney"
+        ),
+        App(
+            title: "monimo (모니모, 삼성 금융네트웍스)",
+            subtitle: "모이는 금융, 커지는 혜택! monimo",
+            downloadState: .downloaded,
+            category: .finance,
+            imageName: "monimo"
+        ),
+        App(
+            title: "네이버페이",
+            subtitle: "지갑 없이 매장에서 결제",
+            downloadState: .reDownloadable,
+            category: .finance,
+            imageName: "naverpay"
+        )
+    ]
+    static let financialPaidApps: [App] = [
+        App(
+            title: "현대카드",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "hyundaicard",
+            price: 52000
+        ),
+        App(
+            title: "현대백화점",
+            downloadState: .updatable,
+            category: .finance,
+            imageName: "hyundaidepartment",
+            price: 1200
+        ),
+        App(
+            title: "카카오뱅크",
+            subtitle: "이미 모두의 은행",
+            downloadState: .downloaded,
+            category: .finance,
+            imageName: "kakaobank",
+            price: 1000
+        ),
+        App(
+            title: "카카오페이",
+            subtitle: "마음 놓고 금융하다",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "kakaopay",
+            price: 3200
+        ),
+        App(
+            title: "케이뱅크",
+            subtitle: "make money",
+            downloadState: .reDownloadable,
+            category: .finance,
+            imageName: "kbank",
+            price: 4400
+        ),
+        App(
+            title: "KBPay",
+            subtitle: "모든 금융을 한번에, 한손에, 한눈에 담다",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "kbpay",
+            price: 100
+        ),
+        App(
+            title: "모바일티머니",
+            downloadState: .updatable,
+            category: .finance,
+            imageName: "mobileTmoney",
+            price: 9000
+        ),
+        App(
+            title: "monimo (모니모, 삼성 금융네트웍스)",
+            subtitle: "모이는 금융, 커지는 혜택! monimo",
+            downloadState: .downloaded,
+            category: .finance,
+            imageName: "monimo",
+            price: 3100
+        ),
+        App(
+            title: "네이버페이",
+            subtitle: "지갑 없이 매장에서 결제",
+            downloadState: .reDownloadable,
+            category: .finance,
+            imageName: "naverpay",
+            price: 4000
+        )
+        
+    ]
+    static let financialFreeApps: [App] = [
+        App(
+            title: "현대카드",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "hyundaicard"
+        ),
+        App(
+            title: "현대백화점",
+            downloadState: .updatable,
+            category: .finance,
+            imageName: "hyundaidepartment"
+        ),
+        App(
+            title: "카카오뱅크",
+            subtitle: "이미 모두의 은행",
+            downloadState: .downloaded,
+            category: .finance,
+            imageName: "kakaobank"
+        ),
+        App(
+            title: "카카오페이",
+            subtitle: "마음 놓고 금융하다",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "kakaopay"
+        ),
+        App(
+            title: "케이뱅크",
+            subtitle: "make money",
+            downloadState: .reDownloadable,
+            category: .finance,
+            imageName: "kbank"
+        ),
+        App(
+            title: "KBPay",
+            subtitle: "모든 금융을 한번에, 한손에, 한눈에 담다",
+            downloadState: .downloadable,
+            category: .finance,
+            imageName: "kbpay"
+        ),
+        App(
+            title: "모바일티머니",
+            downloadState: .updatable,
+            category: .finance,
+            imageName: "mobileTmoney"
+        ),
+        App(
+            title: "monimo (모니모, 삼성 금융네트웍스)",
+            subtitle: "모이는 금융, 커지는 혜택! monimo",
+            downloadState: .downloaded,
+            category: .finance,
+            imageName: "monimo"
+        ),
+        App(
+            title: "네이버페이",
+            subtitle: "지갑 없이 매장에서 결제",
+            downloadState: .reDownloadable,
+            category: .finance,
+            imageName: "naverpay"
+        )
+        
+    ]
     
 }
