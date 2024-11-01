@@ -23,7 +23,11 @@ final class DetailViewController: BaseViewController {
     
     private lazy var appCardView: AppCardView = {
         //TODO: 기본 이미지 추가하기
-        let appCard = AppCardView(image: UIImage(named: "\(self.detail.imageName)") ?? UIImage.toss, title: self.detail.title, subtitle: self.detail.subtitle)
+        let appCard = AppCardView(
+            image: UIImage(named: "\(detail.imageName)") ?? UIImage.toss,
+            title: detail.title,
+            subtitle: detail.subtitle
+        )
         
         return appCard
     }()
@@ -117,7 +121,7 @@ final class DetailViewController: BaseViewController {
     }
     
     @objc private func backButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     override func setStyle() {

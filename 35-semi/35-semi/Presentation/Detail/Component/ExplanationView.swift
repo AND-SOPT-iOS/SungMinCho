@@ -55,7 +55,7 @@ final class ExplanationView: BaseView {
     private let originalExplanation: String
     
     init(explanation: String) {
-        self.originalExplanation = explanation
+        originalExplanation = explanation
         super.init(frame: .zero)
         setStyle()
         setUI()
