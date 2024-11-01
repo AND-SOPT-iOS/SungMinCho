@@ -95,8 +95,7 @@ extension App {
             rank: 4,
             downloadState: .downloadable,
             category: .finance,
-            imageName: "kakaopay",
-            price: 100000
+            imageName: "kakaopay"
         ),
         App(
             title: "케이뱅크",
