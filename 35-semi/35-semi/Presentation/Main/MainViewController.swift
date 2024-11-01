@@ -26,7 +26,6 @@ final class MainViewController: BaseViewController {
     
     override func setStyle() {
         title = "앱"
-        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     override func setUI() {

@@ -46,6 +46,7 @@ final class ReviewCollectionViewCell: BaseCollectionViewCell {
         reviewView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(contentView)
         }
+        
         contentView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(self)
             $0.bottom.equalTo(reviewView.snp.bottom)

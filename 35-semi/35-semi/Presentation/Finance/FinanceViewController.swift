@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FinanceViewController: BaseViewController {
+final class FinanceViewController: BaseViewController, UICollectionViewDelegate {
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(
@@ -57,8 +57,6 @@ final class FinanceViewController: BaseViewController {
     
 }
 
-extension FinanceViewController: UICollectionViewDelegate { }
-
 extension FinanceViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -71,9 +69,9 @@ extension FinanceViewController: UICollectionViewDataSource {
     ) -> Int {
         switch section {
         case 0:
-            return 4
+            return FinanceMainCellModel.mockModels.count
         default:
-            return 9
+            return App.financialEssencialApps.count
         }
     }
     

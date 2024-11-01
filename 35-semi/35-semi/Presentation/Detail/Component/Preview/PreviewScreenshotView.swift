@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PreviewScreenshotView: BaseView {
+final class PreviewScreenshotView: BaseView, UICollectionViewDelegate {
     
     private lazy var previewCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -21,8 +21,7 @@ final class PreviewScreenshotView: BaseView {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.clipsToBounds = true
-        collectionView
-            .register(
+        collectionView.register(
                 PreviewCollectionViewCell.self,
                 forCellWithReuseIdentifier: PreviewCollectionViewCell.cellIdentifier
             )
@@ -82,9 +81,7 @@ final class PreviewScreenshotView: BaseView {
             deviceIcon,
             deviceLabel
         ].forEach {
-            addSubview(
-                $0
-            )
+            addSubview($0)
         }
     }
     
@@ -112,8 +109,6 @@ final class PreviewScreenshotView: BaseView {
     }
     
 }
-
-extension PreviewScreenshotView: UICollectionViewDelegate { }
 
 extension PreviewScreenshotView: UICollectionViewDataSource {
     
@@ -156,7 +151,6 @@ extension PreviewScreenshotView: UICollectionViewDelegateFlowLayout {
     }
     
 }
-
 
 #Preview
 {

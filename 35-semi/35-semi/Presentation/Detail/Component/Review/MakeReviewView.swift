@@ -183,7 +183,7 @@ extension MakeReviewView: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return Review.sampleReviews.count
+        Review.sampleReviews.count
     }
     
     func collectionView(
@@ -210,8 +210,7 @@ extension MakeReviewView: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        
-        return CGSize(width: collectionView.bounds.width - 40, height: 250)
+        CGSize(width: collectionView.bounds.width - 40, height: 250)
     }
     
     func scrollViewWillEndDragging(
@@ -222,7 +221,10 @@ extension MakeReviewView: UICollectionViewDelegateFlowLayout {
         let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
         let cellWidth = scrollView.bounds.width - 30
         let index = round(scrolledOffsetX / cellWidth)
-        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
+        targetContentOffset.pointee = CGPoint(
+            x: index * cellWidth - scrollView.contentInset.left,
+            y: scrollView.contentInset.top
+        )
     }
     
 }

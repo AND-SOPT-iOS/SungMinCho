@@ -48,8 +48,7 @@ extension FinanceMainCellModel {
             thumbnailImageName: App.financialApps[3].imageName,
             subtitle: "\(App.financialApps[3].subtitle)",
             app: App.financialMainApps[3]
-        ),
-        
+        )
     ]
     
 }
