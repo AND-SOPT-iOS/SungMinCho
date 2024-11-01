@@ -41,7 +41,8 @@ final class FinanceViewController: BaseViewController {
     }
     
     override func setStyle() {
-        self.view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemBackground
+        title = "금융"
     }
     
     override func setUI() {

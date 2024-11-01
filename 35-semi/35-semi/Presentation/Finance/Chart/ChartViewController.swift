@@ -26,6 +26,20 @@ final class ChartViewController: BaseViewController {
         setLayout()
     }
     
+    override func setStyle() {
+        title = "인기 차트"
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     override func setUI() {
         view.addSubview(tableView)
     }
