@@ -55,7 +55,7 @@ final class ExplanationView: BaseView {
     private let originalExplanation: String
     
     init(explanation: String) {
-        self.originalExplanation = explanation
+        originalExplanation = explanation
         super.init(frame: .zero)
         setStyle()
         setUI()
@@ -73,7 +73,7 @@ final class ExplanationView: BaseView {
         moreLabelLeftView.layer.sublayers?.first?.frame = moreLabelLeftView.bounds
     }
     
-    @objc func explanationLabelTapped() {
+    @objc private func explanationLabelTapped() {
         explanationLabel.numberOfLines = 0
         explanationLabel.removeGestureRecognizer(tapGestrue)
         moreLabel.removeFromSuperview()

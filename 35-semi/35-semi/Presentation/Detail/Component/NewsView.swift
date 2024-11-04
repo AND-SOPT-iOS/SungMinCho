@@ -70,7 +70,7 @@ final class NewsView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func navigationButtonTapped() {
+    @objc private func navigationButtonTapped() {
         delegate?.navigateToRecordViewController()
     }
     

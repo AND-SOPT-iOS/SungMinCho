@@ -59,7 +59,7 @@ final class DeveloperView: BaseView {
         addGestureRecognizer(tapGesture)
     }
     
-    @objc func viewTapped() {
+    @objc private func viewTapped() {
         delegate?.developerTapped()
     }
     

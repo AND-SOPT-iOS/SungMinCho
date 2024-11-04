@@ -59,10 +59,30 @@ final class MakeReviewView: BaseView {
         return stackView
     }()
     
-    private lazy var reviewView: ReviewView = {
-        let view = ReviewView(review: bestReview)
+    private lazy var reviewCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 0
         
-        return view
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.isScrollEnabled = true
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.clipsToBounds = true
+        collectionView.register(
+            ReviewCollectionViewCell.self,
+            forCellWithReuseIdentifier: ReviewCollectionViewCell.cellIdentifier
+        )
+        collectionView.isPagingEnabled = false
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.decelerationRate = .fast
+        collectionView.contentInset = .init(top: 0, left: 20, bottom: 0, right: 10)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        
+        return collectionView
     }()
     
     private let writeReviewButton: UIButton = {
@@ -87,10 +107,10 @@ final class MakeReviewView: BaseView {
         return button
     }()
     
-    private let bestReview: Review
+    private let bestReviews: [Review]
     
-    init(bestReview: Review) {
-        self.bestReview = bestReview
+    init(bestReviews: [Review]) {
+        self.bestReviews = bestReviews
         super.init(frame: .zero)
         setStyle()
         setUI()
@@ -101,7 +121,7 @@ final class MakeReviewView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func starButtonTapped(_ sender: UIButton) {
+    @objc private func starButtonTapped(_ sender: UIButton) {
         let index = sender.tag
         starButtonList.enumerated().forEach { (i, button) in
             button.isSelected = i <= index
@@ -116,7 +136,7 @@ final class MakeReviewView: BaseView {
         [
             headerLabel,
             starStackView,
-            reviewView,
+            reviewCollectionView,
             writeReviewButton,
             applicationSupportButton
         ].forEach {
@@ -134,20 +154,77 @@ final class MakeReviewView: BaseView {
             $0.centerY.equalTo(starStackView)
         }
         
-        reviewView.snp.makeConstraints {
+        reviewCollectionView.snp.makeConstraints {
             $0.top.equalTo(headerLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(250)
         }
         
         writeReviewButton.snp.makeConstraints {
-            $0.top.equalTo(reviewView.snp.bottom).offset(20)
+            $0.top.equalTo(reviewCollectionView.snp.bottom).offset(20)
             $0.leading.equalToSuperview()
         }
         
         applicationSupportButton.snp.makeConstraints {
-            $0.top.equalTo(reviewView.snp.bottom).offset(20)
+            $0.top.equalTo(reviewCollectionView.snp.bottom).offset(20)
             $0.trailing.equalToSuperview()
         }
+    }
+    
+}
+
+extension MakeReviewView: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        1
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        Review.sampleReviews.count
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ReviewCollectionViewCell.cellIdentifier,
+            for: indexPath
+        ) as? ReviewCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.configure(review: Review.sampleReviews[indexPath.row])
+        
+        return cell
+    }
+    
+}
+
+extension MakeReviewView: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        CGSize(width: collectionView.bounds.width - 40, height: 250)
+    }
+    
+    func scrollViewWillEndDragging(
+        _ scrollView: UIScrollView,
+        withVelocity velocity: CGPoint,
+        targetContentOffset: UnsafeMutablePointer<CGPoint>
+    ) {
+        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
+        let cellWidth = scrollView.bounds.width - 30
+        let index = round(scrolledOffsetX / cellWidth)
+        targetContentOffset.pointee = CGPoint(
+            x: index * cellWidth - scrollView.contentInset.left,
+            y: scrollView.contentInset.top
+        )
     }
     
 }
@@ -155,14 +232,6 @@ final class MakeReviewView: BaseView {
 #Preview
 {
     MakeReviewView(
-        bestReview: Review(
-            writer: "조성민",
-            writeDate: Date(),
-            title: "폰트 크기 복구해주세요.....",
-            score: Score.four,
-            content: "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC",
-            developerAnswer: "그랬구나~",
-            devleoperAnswerDate: Date()
-        )
+        bestReviews: Review.sampleReviews
     )
 }

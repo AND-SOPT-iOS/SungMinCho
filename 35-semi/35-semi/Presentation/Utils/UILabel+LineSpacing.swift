@@ -17,7 +17,7 @@ extension UILabel {
             NSAttributedString.Key.paragraphStyle,
             value: style,
             range: NSRange(location: 0, length: attributedStr.length))
-        self.attributedText = attributedStr
+        attributedText = attributedStr
     }
     
 }

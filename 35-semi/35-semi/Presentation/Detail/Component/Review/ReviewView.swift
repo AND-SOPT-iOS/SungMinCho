@@ -9,30 +9,6 @@ import UIKit
 
 final class ReviewView: BaseView {
     
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        
-        return stackView
-    }()
-    
-    private let contentView: UIView = {
-        let view = UIView()
-        
-        return view
-    }()
-    
-    private let headerView: UIView = {
-        let view = UIView()
-        
-        return view
-    }()
-    
-    private let developerHeaderView: UIView = {
-        let view = UIView()
-        
-        return view
-    }()
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .bold)
@@ -68,8 +44,6 @@ final class ReviewView: BaseView {
         
         return label
     }()
-    
-    private let contentLabelView = UIView()
     
     private let contentLabel: UILabel = {
         let label = UILabel()
@@ -114,7 +88,7 @@ final class ReviewView: BaseView {
     private let contentMoreLabelLeftView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-
+        
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [
             UIColor.systemGray6.withAlphaComponent(0).cgColor,
@@ -124,11 +98,9 @@ final class ReviewView: BaseView {
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         view.layer.addSublayer(gradientLayer)
-
+        
         return view
     }()
-    
-    private let answerLabelView = UIView()
     
     private lazy var answerMoreLabel: UILabel = {
         let label = UILabel()
@@ -145,7 +117,7 @@ final class ReviewView: BaseView {
     private let answerMoreLabelLeftView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-
+        
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [
             UIColor.systemGray6.withAlphaComponent(0).cgColor,
@@ -155,16 +127,15 @@ final class ReviewView: BaseView {
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         view.layer.addSublayer(gradientLayer)
-
+        
         return view
     }()
     
-    init(review: Review) {
+    init() {
         super.init(frame: .zero)
         setStyle()
         setUI()
         setLayout()
-        updateUI(review: review)
     }
     
     required init?(coder: NSCoder) {
@@ -176,9 +147,35 @@ final class ReviewView: BaseView {
         
         contentMoreLabelLeftView.layer.sublayers?.first?.frame = contentMoreLabelLeftView.bounds
         answerMoreLabelLeftView.layer.sublayers?.first?.frame = answerMoreLabelLeftView.bounds
+        
+        if !contentLabel.isTruncated {
+            contentMoreLabel.isHidden = true
+            contentMoreLabelLeftView.isHidden = true
+        }
+        
+        if !answerContentLabel.isTruncated {
+            answerMoreLabel.isHidden = true
+            answerMoreLabelLeftView.isHidden = true
+        }
     }
     
-    private func updateUI(review: Review) {
+    func resetUI() {
+        titleLabel.text = ""
+        dateLabel.text = ""
+        writerLabel.text = ""
+        contentLabel.text = ""
+        contentMoreLabel.isHidden = false
+        contentMoreLabelLeftView.isHidden = false
+        answerMoreLabel.isHidden = false
+        answerMoreLabelLeftView.isHidden = false
+        
+        for i in 0..<5 {
+            guard let imageView = starStackView.subviews[i] as? UIImageView else { return }
+            imageView.image = UIImage(systemName: "star")
+        }
+    }
+    
+    func updateUI(review: Review) {
         titleLabel.text = review.title
         dateLabel.text = review.writeDate.convertToString()
         writerLabel.text = review.writer
@@ -187,10 +184,15 @@ final class ReviewView: BaseView {
             developerLabel.text = "개발자 답변"
             answerDateLabel.text = review.devleoperAnswerDate?.convertToString()
             answerContentLabel.text = review.developerAnswer
+                snp.makeConstraints {
+                $0.top.leading.trailing.equalTo(self)
+                $0.bottom.equalTo(answerContentLabel.snp.bottom).offset(20)
+            }
         } else {
-            developerHeaderView.removeFromSuperview()
-            answerLabelView.removeFromSuperview()
-            resizeContentView()
+            snp.makeConstraints {
+                $0.top.leading.trailing.equalTo(self)
+                $0.bottom.equalTo(contentLabel.snp.bottom).offset(20)
+            }
         }
         for i in 0..<5 {
             guard let imageView = starStackView.subviews[i] as? UIImageView else { return }
@@ -200,170 +202,101 @@ final class ReviewView: BaseView {
                 imageView.image = UIImage(systemName: "star")
             }
         }
-        if !contentLabel.isTruncated {
-            contentMoreLabel.removeFromSuperview()
-            contentMoreLabelLeftView.removeFromSuperview()
-        }
         
-        if !answerContentLabel.isTruncated {
-            answerMoreLabel.removeFromSuperview()
-            answerMoreLabelLeftView.removeFromSuperview()
-        }
     }
     
-    @objc func contentMoreLabelTapped() {
-        contentLabel.numberOfLines = 0
-        contentMoreLabel.removeFromSuperview()
-        contentMoreLabelLeftView.removeFromSuperview()
+    @objc private func contentMoreLabelTapped() {
+        // TODO: delegate로 ViewController Push
     }
     
-    @objc func answerMoreLabelTapped() {
-        answerContentLabel.numberOfLines = 0
-        answerMoreLabel.removeFromSuperview()
-        answerMoreLabelLeftView.removeFromSuperview()
+    @objc private func answerMoreLabelTapped() {
+        // TODO: delegate로 ViewController Push
     }
-
+    
     override func setStyle() {
-        layer.cornerRadius = 10
         backgroundColor = .systemGray6
+        layer.cornerRadius = 16
+        clipsToBounds = true
     }
     
     override func setUI() {
         [
             titleLabel,
-            starStackView,
             dateLabel,
-            writerLabel
-        ].forEach {
-            headerView.addSubview($0)
-        }
-        [
+            starStackView,
+            writerLabel,
+            contentLabel,
+            contentMoreLabel,
+            contentMoreLabelLeftView,
             developerLabel,
-            answerDateLabel
-        ].forEach {
-            developerHeaderView.addSubview($0)
-        }
-        stackView.addArrangedSubview(contentView)
-        [
-            headerView,
-            contentLabelView,
-            developerHeaderView,
-            answerLabelView
-        ].forEach {
-            contentView.addSubview($0)
-        }
-        [
+            answerDateLabel,
             answerContentLabel,
             answerMoreLabel,
             answerMoreLabelLeftView
         ].forEach {
-            answerLabelView.addSubview($0)
+            addSubview($0)
         }
-        [
-            contentLabel,
-            contentMoreLabel,
-            contentMoreLabelLeftView
-        ].forEach {
-            contentLabelView.addSubview($0)
-        }
-        addSubview(stackView)
     }
     
     override func setLayout() {
-        stackView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(stackView)
-        }
-        
-        headerView.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(contentView).inset(20)
-            $0.height.equalTo(40)
-        }
-        
-        contentLabelView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(contentView).inset(20)
-        }
-        
-        contentLabel.snp.makeConstraints {
-            $0.edges.equalTo(contentLabelView)
-        }
-        
-        contentMoreLabel.snp.makeConstraints {
-            $0.trailing.bottom.equalTo(contentLabelView)
-        }
-        
-        contentMoreLabelLeftView.snp.makeConstraints {
-            $0.trailing.equalTo(contentMoreLabel.snp.leading)
-            $0.bottom.equalTo(contentMoreLabel.snp.bottom)
-            $0.width.equalTo(40)
-            $0.height.equalTo(contentMoreLabel.snp.height)
-        }
-        
-        developerHeaderView.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(contentView).inset(20)
-            $0.height.equalTo(10)
-        }
-        
-        answerLabelView.snp.makeConstraints {
-            $0.top.equalTo(developerHeaderView.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(contentView).inset(20)
-        }
-        
-        answerContentLabel.snp.makeConstraints {
-            $0.edges.equalTo(answerLabelView)
-        }
-        
-        answerMoreLabel.snp.makeConstraints {
-            $0.trailing.bottom.equalTo(answerLabelView)
-        }
-        
-        answerMoreLabelLeftView.snp.makeConstraints {
-            $0.trailing.equalTo(answerMoreLabel.snp.leading)
-            $0.bottom.equalTo(answerMoreLabel.snp.bottom)
-            $0.width.equalTo(40)
-            $0.height.equalTo(answerMoreLabel.snp.height)
-        }
-        
         titleLabel.snp.makeConstraints {
-            $0.leading.top.trailing.equalTo(headerView)
+            $0.top.leading.equalToSuperview().inset(20)
+        }
+        
+        dateLabel.snp.makeConstraints {
+            $0.top.trailing.equalToSuperview().inset(20)
         }
         
         starStackView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(headerView)
-        }
-        
-        dateLabel.snp.makeConstraints {
-            $0.top.trailing.equalTo(headerView)
+            $0.leading.equalToSuperview().inset(20)
         }
         
         writerLabel.snp.makeConstraints {
-            $0.centerY.equalTo(starStackView)
-            $0.trailing.equalTo(headerView)
+            $0.top.equalTo(dateLabel.snp.bottom)
+            $0.trailing.equalTo(dateLabel)
+        }
+        
+        contentLabel.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        contentMoreLabel.snp.makeConstraints {
+            $0.trailing.bottom.equalTo(contentLabel)
+        }
+        
+        contentMoreLabelLeftView.snp.makeConstraints {
+            $0.trailing.equalTo(contentMoreLabel.snp.leading)
+            $0.bottom.equalTo(contentLabel)
+            $0.width.equalTo(40)
+            $0.height.equalTo(contentMoreLabel)
         }
         
         developerLabel.snp.makeConstraints {
-            $0.top.equalTo(developerHeaderView)
-            $0.leading.equalTo(developerHeaderView)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
         }
         
         answerDateLabel.snp.makeConstraints {
-            $0.centerY.equalTo(developerLabel)
-            $0.trailing.equalTo(developerHeaderView)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
         }
-        resizeContentView()
-    }
-    
-    private func resizeContentView() {
-        if let lastView = contentView.subviews.last {
-            contentView.snp.makeConstraints {
-                $0.bottom.equalTo(lastView.snp.bottom).offset(20)
-            }
+        
+        answerContentLabel.snp.makeConstraints {
+            $0.top.equalTo(developerLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        answerMoreLabel.snp.makeConstraints {
+            $0.bottom.trailing.equalTo(answerContentLabel)
+        }
+        
+        answerMoreLabelLeftView.snp.makeConstraints {
+            $0.trailing.equalTo(answerMoreLabel.snp.leading)
+            $0.bottom.equalTo(answerContentLabel.snp.bottom)
+            $0.width.equalTo(40)
+            $0.height.equalTo(answerMoreLabel)
         }
     }
     
@@ -371,20 +304,20 @@ final class ReviewView: BaseView {
 
 #Preview
 {
-    ReviewView(
-        review: Review(
-            writer: "조성민",
-            writeDate: Date(),
-            title: "폰트 크기 복구해주세요.....",
-            score: Score.four,
-            content: """
-오늘 토스가 어쩌구 저쩌구 오늘 토스가
-어쩌구 저쩌구 오늘 토스가 어쩌구 저쩌구 오늘 토스가 어쩌구
-저쩌구 오늘 토스가 어쩌구 저쩌구 오늘 토스가 어쩌구 저쩌구
-오늘 토스가 어쩌구 저쩌구 오늘 토스가 어쩌구 저쩌구 오늘
-""",
-            developerAnswer: "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC",
-            devleoperAnswerDate: Date()
+    let reviewView: ReviewView = {
+        let view = ReviewView()
+        view.updateUI(
+            review: Review(
+                writer: "조성민",
+                writeDate: Date(),
+                title: "폰트 크기 복구해주세요.....",
+                score: Score.four,
+                content: "오늘 토스가 어쩌구 저쩌구 오늘 토스가 오늘 토스가 어쩌구 저쩌구 오늘 토스가 오늘 토스가 어쩌구 저쩌구 오늘 토스가 오늘 토스가 어쩌구 저쩌구",
+                developerAnswer: "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC",
+                devleoperAnswerDate: Date()
+            )
         )
-    )
+        return view
+    }()
+    reviewView
 }

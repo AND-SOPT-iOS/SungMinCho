@@ -23,7 +23,11 @@ final class DetailViewController: BaseViewController {
     
     private lazy var appCardView: AppCardView = {
         //TODO: 기본 이미지 추가하기
-        let appCard = AppCardView(image: UIImage(named: "\(self.detail.imageName)") ?? UIImage.toss, title: self.detail.title, subtitle: self.detail.subtitle)
+        let appCard = AppCardView(
+            image: UIImage(named: "\(detail.imageName)") ?? UIImage.toss,
+            title: detail.title,
+            subtitle: detail.subtitle
+        )
         
         return appCard
     }()
@@ -89,10 +93,10 @@ final class DetailViewController: BaseViewController {
     }()
     
     private lazy var makeReviewView: MakeReviewView? = {
-        if let bestReview = detail.bestReviews.first {
-            return MakeReviewView(bestReview: bestReview)
-        } else {
+        if detail.bestReviews.isEmpty {
             return nil
+        } else {
+            return MakeReviewView(bestReviews: detail.bestReviews)
         }
     }()
     
@@ -116,8 +120,8 @@ final class DetailViewController: BaseViewController {
         setLayout()
     }
     
-    @objc func backButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     override func setStyle() {
@@ -192,7 +196,6 @@ final class DetailViewController: BaseViewController {
             $0.height.equalTo(160)
         }
         
-        // TODO: previewScreenshot 레이아웃 수정
         previewScreenshotView.snp.makeConstraints {
             $0.top.equalTo(newsView.snp.bottom).offset(20)
             $0.leading.trailing.equalTo(scrollViewContentView)
@@ -298,17 +301,7 @@ extension DetailViewController: EvaluationWithReviewViewDelegate {
 • 그리고 마음까지, 간단한 메시지와 이모티콘을 함께 보내보 세요.
 """,
             developer: "Viva Republica",
-            bestReviews: [
-                Review(
-                    writer: "조성민",
-                    writeDate: Date(),
-                    title: "제목은 제목입니다",
-                    score: Score.four,
-                    content: """
-                    동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람 대한으로 길이 보전하세
-                    """
-                )
-            ],
+            bestReviews: Review.sampleReviews,
             reviewDistribution: ReviewDistribution(
                 five: 58800,
                 four: 10920,

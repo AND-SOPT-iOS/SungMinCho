@@ -75,12 +75,14 @@ final class ReviewDistributionBar: BaseView {
         starImageStackView.snp.makeConstraints {
             $0.leading.top.equalToSuperview()
         }
+        
         barBackgroundView.snp.makeConstraints {
             $0.centerY.equalTo(starImageStackView)
             $0.leading.equalTo(starImageStackView.snp.trailing).offset(10)
             $0.trailing.equalToSuperview()
             $0.height.equalTo(4)
         }
+        
         barView.snp.makeConstraints {
             $0.centerY.equalTo(starImageStackView)
             $0.leading.equalTo(starImageStackView.snp.trailing).offset(10)

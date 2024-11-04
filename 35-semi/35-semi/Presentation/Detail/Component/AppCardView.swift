@@ -64,9 +64,9 @@ final class AppCardView: BaseView {
     init(image: UIImage, title: String, subtitle: String) {
         super.init(frame: .zero)
         
-        self.imageView.image = image
-        self.titleLabel.text = title
-        self.subtitleLabel.text = subtitle
+        imageView.image = image
+        titleLabel.text = title
+        subtitleLabel.text = subtitle
         setStyle()
         setUI()
         setLayout()
@@ -84,7 +84,7 @@ final class AppCardView: BaseView {
             openButton,
             shareButton
         ].forEach {
-            self.addSubview($0)
+            addSubview($0)
         }
     }
     
