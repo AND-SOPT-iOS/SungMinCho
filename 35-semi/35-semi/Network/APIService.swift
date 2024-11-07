@@ -10,11 +10,17 @@ import Foundation
 
 final class APIService {
     
+    private let keyChainManager: KeyChainManager
+    
+    init(keyChainManager: KeyChainManager) {
+        self.keyChainManager = keyChainManager
+    }
+    
     func register(
         username: String,
         password: String,
         hobby: String,
-        completion: @escaping (Result<Bool, NetworkError>
+        completion: @escaping (Result<Bool, RegisterError>
         ) -> Void) {
         AF.request(
             UserRouter.register(
@@ -30,16 +36,15 @@ final class APIService {
                   let data = response.data,
                   let self
             else {
-                completion(.failure(.unknownError))
+                completion(.failure(.bodyInvalid))
                 return
             }
-            
             switch response.result {
             case .success:
                 completion(.success(true))
             case .failure(let error):
                 dump(error)
-                let error = handleStatusCode(statusCode: statusCode, responseData: data)
+                let error = handleRegisterStatusCode(statusCode: statusCode, responseData: data)
                 completion(.failure(error))
             }
         }
@@ -48,7 +53,7 @@ final class APIService {
     func login(
         username: String,
         password: String,
-        completion: @escaping (Result<String, NetworkError>
+        completion: @escaping (Result<Void, LoginError>
         ) -> Void
     ) {
         AF.request(
@@ -59,24 +64,30 @@ final class APIService {
                 )
             )
         )
+        .validate()
         .response { [weak self] response in
             guard let statusCode = response.response?.statusCode,
                   let data = response.data,
                   let self
             else {
-                completion(.failure(.unknownError))
+                completion(.failure(.bodyInvalid))
                 return
             }
-            guard let token = convertToDTO(data: data, type: LoginResultDTO.self) else {
-                completion(.failure(.unknownError))
-                return
-            }
+            dump(response)
             switch response.result {
             case .success:
-                completion(.success(token.result.token))
+                guard let token = convertToDTO(data: data, type: LoginResultDTO.self) else {
+                    completion(.failure(.decodingFailed))
+                    return
+                }
+                let status = keyChainManager.saveValue(token: token.result.token)
+                if status != errSecSuccess {
+                    completion(.failure(.tokenSaveFailed))
+                }
+                completion(.success(()))
             case .failure(let error):
                 dump(error)
-                let error = handleStatusCode(statusCode: statusCode, responseData: data)
+                let error = handleLoginStatusCode(statusCode: statusCode, responseData: data)
                 completion(.failure(error))
             }
         }
@@ -99,21 +110,35 @@ extension APIService {
 
 extension APIService {
     
-    func handleStatusCode(statusCode: Int,responseData: Data) -> NetworkError {
+    func handleRegisterStatusCode(statusCode: Int, responseData: Data) -> RegisterError {
         let errorCode = decodeError(responseData: responseData)
         switch (statusCode, errorCode) {
         case (400, "00"):
-          return .invalidRequest
+            return .bodyInvalid
         case (400, "01"):
-          return .expressionError
+            return .lengthInvalid
         case (404, ""):
-          return .invalidURL
+            return .wrongPath
         case (409, "00"):
-          return .duplicateError
-        case (500, ""):
-          return .serverError
+            return .duplicatedUserName
         default:
-          return .unknownError
+            return .unknown
+        }
+    }
+    
+    func handleLoginStatusCode(statusCode: Int, responseData: Data) -> LoginError {
+        let errorCode = decodeError(responseData: responseData)
+        switch (statusCode, errorCode) {
+        case (400, "01"):
+            return .bodyInvalid
+        case (400, "02"):
+            return .loginInvalid
+        case (403, "01"):
+            return .passwordInvalid
+        case (404, "00"):
+            return .wrongPath
+        default:
+            return .unknown
         }
     }
     

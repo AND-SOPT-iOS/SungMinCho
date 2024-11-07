@@ -23,7 +23,7 @@ extension Router {
     
     func asURLRequest() throws -> URLRequest {
         guard let url = URL(string: baseURL + path) else {
-            throw NetworkError.invalidURL
+            throw RouterError.invalidURL
         }
         var request = URLRequest(url: url)
         
@@ -34,7 +34,7 @@ extension Router {
             if let parameters = parameters {
                 return try encoding.encode(request, with: parameters)
             } else {
-                throw NetworkError.invalidRequest//TODO: 수정
+                throw RouterError.invalidRequest//TODO: 수정
             }
         }
         

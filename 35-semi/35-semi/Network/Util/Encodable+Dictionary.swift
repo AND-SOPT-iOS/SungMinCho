@@ -15,7 +15,7 @@ extension Encodable {
             with: data,
             options: .allowFragments
         ) as? [String: Any] else {
-            throw NetworkError.decodingError // TODO: 에러처리
+            throw RouterError.encoding
         }
         return dictionary
     }
