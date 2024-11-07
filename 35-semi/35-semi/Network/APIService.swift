@@ -20,7 +20,7 @@ final class APIService {
         username: String,
         password: String,
         hobby: String,
-        completion: @escaping (Result<Bool, RegisterError>
+        completion: @escaping (Result<Void, RegisterError>
         ) -> Void) {
         AF.request(
             UserRouter.register(
@@ -31,6 +31,7 @@ final class APIService {
                 )
             )
         )
+        .validate()
         .response { [weak self] response in
             guard let statusCode = response.response?.statusCode,
                   let data = response.data,
@@ -41,9 +42,8 @@ final class APIService {
             }
             switch response.result {
             case .success:
-                completion(.success(true))
-            case .failure(let error):
-                dump(error)
+                completion(.success(()))
+            case .failure:
                 let error = handleRegisterStatusCode(statusCode: statusCode, responseData: data)
                 completion(.failure(error))
             }
@@ -73,7 +73,6 @@ final class APIService {
                 completion(.failure(.bodyInvalid))
                 return
             }
-            dump(response)
             switch response.result {
             case .success:
                 guard let token = convertToDTO(data: data, type: LoginResultDTO.self) else {
@@ -85,8 +84,7 @@ final class APIService {
                     completion(.failure(.tokenSaveFailed))
                 }
                 completion(.success(()))
-            case .failure(let error):
-                dump(error)
+            case .failure:
                 let error = handleLoginStatusCode(statusCode: statusCode, responseData: data)
                 completion(.failure(error))
             }
@@ -112,6 +110,7 @@ extension APIService {
     
     func handleRegisterStatusCode(statusCode: Int, responseData: Data) -> RegisterError {
         let errorCode = decodeError(responseData: responseData)
+        dump(responseData)
         switch (statusCode, errorCode) {
         case (400, "00"):
             return .bodyInvalid
@@ -128,6 +127,7 @@ extension APIService {
     
     func handleLoginStatusCode(statusCode: Int, responseData: Data) -> LoginError {
         let errorCode = decodeError(responseData: responseData)
+        dump(responseData)
         switch (statusCode, errorCode) {
         case (400, "01"):
             return .bodyInvalid

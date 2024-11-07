@@ -12,7 +12,7 @@ extension UITextField {
     func setStyle() {
         autocapitalizationType = .none
         autocorrectionType = .no
-        layer.borderWidth = 0.5
+        layer.borderWidth = 0.7
         layer.cornerRadius = 10
         clearButtonMode = .whileEditing
         returnKeyType = .done

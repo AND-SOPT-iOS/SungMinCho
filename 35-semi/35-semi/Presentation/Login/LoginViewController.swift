@@ -11,10 +11,18 @@ final class LoginViewController: BaseViewController {
     
     private let apiService: APIService
     
+    private let idHeaderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "아이디"
+        label.font = .systemFont(ofSize: 20, weight: .regular)
+        
+        return label
+    }()
+    
     private lazy var idTextField: UITextField = {
         let textField = UITextField()
         textField.setStyle()
-        textField.placeholder = "아이디"
+        textField.placeholder = "1~8 글자수"
         textField.delegate = self
         textField.addTarget(
             self,
@@ -35,10 +43,18 @@ final class LoginViewController: BaseViewController {
         return label
     }()
     
+    private let passwordHeaderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "비밀번호"
+        label.font = .systemFont(ofSize: 20, weight: .regular)
+        
+        return label
+    }()
+    
     private lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.setStyle()
-        textField.placeholder = "비밀번호"
+        textField.placeholder = "1~8 글자수"
         textField.isSecureTextEntry = true
         textField.delegate = self
         textField.addTarget(
@@ -135,8 +151,10 @@ final class LoginViewController: BaseViewController {
     
     override func setUI() {
         [
+            idHeaderLabel,
             idTextField,
             idWarningLabel,
+            passwordHeaderLabel,
             passwordTextField,
             passwordWarningLabel,
             loginButton,
@@ -147,7 +165,6 @@ final class LoginViewController: BaseViewController {
     }
     
     override func setLayout() {
-        
         idTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview().offset(-150)
@@ -155,14 +172,24 @@ final class LoginViewController: BaseViewController {
             $0.height.equalTo(44)
         }
         
+        idHeaderLabel.snp.makeConstraints {
+            $0.leading.equalTo(idTextField).offset(4)
+            $0.bottom.equalTo(idTextField.snp.top).offset(-4)
+        }
+        
         idWarningLabel.snp.makeConstraints {
             $0.top.equalTo(idTextField.snp.bottom).offset(2)
             $0.leading.equalTo(idTextField).offset(4)
         }
         
+        passwordHeaderLabel.snp.makeConstraints {
+            $0.top.equalTo(idWarningLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(idWarningLabel)
+        }
+        
         passwordTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(idWarningLabel.snp.bottom).offset(8)
+            $0.top.equalTo(passwordHeaderLabel.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.height.equalTo(44)
         }
@@ -173,7 +200,7 @@ final class LoginViewController: BaseViewController {
         }
         
         loginButton.snp.makeConstraints {
-            $0.top.equalTo(passwordWarningLabel.snp.bottom).offset(8)
+            $0.top.equalTo(passwordWarningLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.height.equalTo(50)
         }
@@ -202,7 +229,7 @@ final class LoginViewController: BaseViewController {
     }
     
     @objc private func signUpButtonTapped() {
-        let signUpViewController = SignUpViewController()
+        let signUpViewController = SignUpViewController(apiService: apiService)
         navigationController?.pushViewController(
             signUpViewController,
             animated: true
@@ -219,15 +246,16 @@ final class LoginViewController: BaseViewController {
     
     private func login(id: String, password: String) {
         apiService.login(username: id, password: password) { [weak self] result in
+            guard let self else { return }
             switch result {
             case .success:
-                self?.navigateToNextViewController()
+                navigateToNextViewController()
             case .failure(let failure):
                 switch failure {
                 case .passwordInvalid, .loginInvalid:
-                    self?.presentLoginAlert()
+                    present(loginAlert, animated: true)
                 default:
-                    self?.presentErrorAlert()
+                    present(errorAlert, animated: true)
                 }
             }
         }
@@ -242,14 +270,6 @@ final class LoginViewController: BaseViewController {
     private func navigateToNextViewController() {
         let nextViewController = MainViewController()
         navigationController?.pushViewController(nextViewController, animated: true)
-    }
-    
-    private func presentLoginAlert() {
-        present(loginAlert, animated: true)
-    }
-    
-    private func presentErrorAlert() {
-        present(errorAlert, animated: true)
     }
     
 }
