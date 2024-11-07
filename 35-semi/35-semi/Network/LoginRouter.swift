@@ -40,7 +40,9 @@ extension LoginRouter: Router {
     var headers: [String : String] {
         switch self {
         case .login:
-            [:]
+            [
+                "Content-Type": "application/json"
+            ]
         }
     }
     
@@ -51,13 +53,15 @@ extension LoginRouter: Router {
                 return try dto.asDictionary()
             }
         } catch {
+            // TODO: 에러처리
+            print("Parameter Dictionary 변환 실패")
             return nil
         }
     }
     
     var encoding: (any Alamofire.ParameterEncoding)? {
         switch self {
-        case .login(let dto):
+        case .login:
             JSONEncoding.default
         }
     }

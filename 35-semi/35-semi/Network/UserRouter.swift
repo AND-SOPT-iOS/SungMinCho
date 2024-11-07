@@ -42,7 +42,7 @@ extension UserRouter: Router {
                 .post
         case .getMyHobby:
                 .get
-        case .getHobby(let id):
+        case .getHobby:
                 .get
         case .putInformation:
                 .put
@@ -58,7 +58,7 @@ extension UserRouter: Router {
             ]
         case .getMyHobby:
             [:]
-        case .getHobby(let id):
+        case .getHobby:
             [:]
         case .putInformation:
             [:]
@@ -73,7 +73,7 @@ extension UserRouter: Router {
                 return try dto.asDictionary()
             case .getMyHobby:
                 return nil
-            case .getHobby(let id):
+            case .getHobby:
                 return nil
             case .putInformation:
                 return nil
@@ -90,7 +90,7 @@ extension UserRouter: Router {
             JSONEncoding.default
         case .getMyHobby:
             JSONEncoding.default
-        case .getHobby(let id):
+        case .getHobby:
             JSONEncoding.default
         case .putInformation:
             JSONEncoding.default
