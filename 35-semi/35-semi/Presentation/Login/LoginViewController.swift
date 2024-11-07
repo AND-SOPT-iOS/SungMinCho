@@ -249,7 +249,9 @@ final class LoginViewController: BaseViewController {
             guard let self else { return }
             switch result {
             case .success:
-                navigateToNextViewController()
+                UserDefaults.standard.set(id, forKey: "id")
+                UserDefaults.standard.set(password, forKey: "password")
+                navigateToNextViewController(username: id, password: password)
             case .failure(let failure):
                 switch failure {
                 case .passwordInvalid, .loginInvalid:
@@ -262,14 +264,20 @@ final class LoginViewController: BaseViewController {
     }
     
     private func checkAutoLogin() {
-        if DefaultKeyChainManager.shared.searchValue() != nil {
-            navigateToNextViewController()
+        if let id = UserDefaults.standard.string(forKey: "id"),
+           let password = UserDefaults.standard.string(forKey: "password") {
+            navigateToNextViewController(username: id, password: password)
         }
     }
     
-    private func navigateToNextViewController() {
-        let nextViewController = MainViewController()
-        navigationController?.pushViewController(nextViewController, animated: true)
+    private func navigateToNextViewController(username: String, password: String) {
+        let mainViewController = MainViewController()
+        let myPageViewController = MyPageViewController(
+            apiService: apiService,
+            username: username,
+            password: password
+        )
+        navigationController?.pushViewController(mainViewController, animated: true)
     }
     
 }
