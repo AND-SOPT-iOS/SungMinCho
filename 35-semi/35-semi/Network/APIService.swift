@@ -44,7 +44,10 @@ final class APIService {
             case .success:
                 completion(.success(()))
             case .failure:
-                let error = handleRegisterStatusCode(statusCode: statusCode, responseData: data)
+                let error = handleRegisterStatusCode(
+                    statusCode: statusCode,
+                    responseData: data
+                )
                 completion(.failure(error))
             }
         }
@@ -75,7 +78,10 @@ final class APIService {
             }
             switch response.result {
             case .success:
-                guard let token = convertToDTO(data: data, type: LoginResultDTO.self) else {
+                guard let token = convertToDTO(
+                    data: data,
+                    type: LoginResultDTO.self
+                ) else {
                     completion(.failure(.decodingFailed))
                     return
                 }
@@ -85,7 +91,47 @@ final class APIService {
                 }
                 completion(.success(()))
             case .failure:
-                let error = handleLoginStatusCode(statusCode: statusCode, responseData: data)
+                let error = handleLoginStatusCode(
+                    statusCode: statusCode,
+                    responseData: data
+                )
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func fetchMyHobby(
+        completion: @escaping (Result<String, MyHobbyError>
+        ) -> Void
+    ) {
+        AF.request(
+            UserRouter.getMyHobby,
+            interceptor: Interceptor()
+        )
+        .validate()
+        .response { [weak self] response in
+            guard let statusCode = response.response?.statusCode,
+                  let data = response.data,
+                  let self
+            else {
+                completion(.failure(.bodyInvalid))
+                return
+            }
+            switch response.result {
+            case .success:
+                guard let token = convertToDTO(
+                    data: data,
+                    type: MyHobbyResultDTO.self
+                ) else {
+                    completion(.failure(.decodingFailed))
+                    return
+                }
+                completion(.success(token.result.hobby))
+            case .failure:
+                let error = handleMyHobbyStatusCode(
+                    statusCode: statusCode,
+                    responseData: data
+                )
                 completion(.failure(error))
             }
         }
@@ -95,7 +141,7 @@ final class APIService {
 
 extension APIService {
     
-    func convertToDTO<T: Decodable>(data: Data, type: T.Type) -> T? {
+    private func convertToDTO<T: Decodable>(data: Data, type: T.Type) -> T? {
         do {
             let dto = try JSONDecoder().decode(T.self, from: data)
             return dto
@@ -108,7 +154,10 @@ extension APIService {
 
 extension APIService {
     
-    func handleRegisterStatusCode(statusCode: Int, responseData: Data) -> RegisterError {
+    private func handleRegisterStatusCode(
+        statusCode: Int,
+        responseData: Data
+    ) -> RegisterError {
         let errorCode = decodeError(responseData: responseData)
         dump(responseData)
         switch (statusCode, errorCode) {
@@ -125,7 +174,10 @@ extension APIService {
         }
     }
     
-    func handleLoginStatusCode(statusCode: Int, responseData: Data) -> LoginError {
+    private func handleLoginStatusCode(
+        statusCode: Int,
+        responseData: Data
+    ) -> LoginError {
         let errorCode = decodeError(responseData: responseData)
         dump(responseData)
         switch (statusCode, errorCode) {
@@ -142,7 +194,25 @@ extension APIService {
         }
     }
     
-    func decodeError(responseData: Data) -> String {
+    private func handleMyHobbyStatusCode(
+        statusCode: Int,
+        responseData: Data
+    ) -> MyHobbyError {
+        let errorCode = decodeError(responseData: responseData)
+        dump(responseData)
+        switch (statusCode, errorCode) {
+        case (401, "00"):
+            return .tokenMissing
+        case (403, "00"):
+            return .tokenInvalid
+        case (404, "00"):
+            return .wrongPath
+        default:
+            return .unknown
+        }
+    }
+    
+    private func decodeError(responseData: Data) -> String {
         guard let errorResponse = try? JSONDecoder().decode(
             ErrorResponseDTO.self,
             from: responseData

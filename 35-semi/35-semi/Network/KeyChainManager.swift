@@ -8,7 +8,7 @@
 import Security
 import Foundation
 
-protocol KeyChainManager {
+protocol KeyChainManager: Sendable {
     
     func saveValue(token: String) -> OSStatus
     func changeValue(token: String) -> OSStatus

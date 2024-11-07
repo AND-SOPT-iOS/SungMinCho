@@ -36,7 +36,7 @@ extension UserRouter: Router {
         }
     }
     
-    var method: Alamofire.HTTPMethod {
+    var method: HTTPMethod {
         switch self {
         case .register:
                 .post
@@ -52,27 +52,20 @@ extension UserRouter: Router {
     // TODO: Register 외 수정
     var headers: [String : String] {
         switch self {
-        case .register:
+        default:
             [
                 "Content-Type": "application/json"
             ]
-        case .getMyHobby:
-            [:]
-        case .getHobby:
-            [:]
-        case .putInformation:
-            [:]
         }
     }
     
-    // TODO: Register 외 수정
     var parameters: [String : Any]? {
         do {
             switch self {
             case .register(let dto):
                 return try dto.asDictionary()
             case .getMyHobby:
-                return nil
+                return [:]
             case .getHobby:
                 return nil
             case .putInformation:
@@ -84,14 +77,14 @@ extension UserRouter: Router {
     }
     
     // TODO: Register 외 수정
-    var encoding: (any Alamofire.ParameterEncoding)? {
+    var encoding: (any ParameterEncoding)? {
         switch self {
         case .register:
             JSONEncoding.default
         case .getMyHobby:
-            JSONEncoding.default
+            nil
         case .getHobby:
-            JSONEncoding.default
+            nil
         case .putInformation:
             JSONEncoding.default
         }
