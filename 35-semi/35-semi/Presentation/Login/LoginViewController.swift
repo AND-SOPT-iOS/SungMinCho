@@ -142,7 +142,6 @@ final class LoginViewController: BaseViewController {
         setStyle()
         setUI()
         setLayout()
-        checkAutoLogin()
     }
     
     override func setStyle() {
@@ -251,7 +250,7 @@ final class LoginViewController: BaseViewController {
             case .success:
                 UserDefaults.standard.set(id, forKey: "id")
                 UserDefaults.standard.set(password, forKey: "password")
-                navigateToNextViewController(username: id, password: password)
+                navigateToNextViewController()
             case .failure(let failure):
                 switch failure {
                 case .passwordInvalid, .loginInvalid:
@@ -263,21 +262,9 @@ final class LoginViewController: BaseViewController {
         }
     }
     
-    private func checkAutoLogin() {
-        if let id = UserDefaults.standard.string(forKey: "id"),
-           let password = UserDefaults.standard.string(forKey: "password") {
-            navigateToNextViewController(username: id, password: password)
-        }
-    }
-    
-    private func navigateToNextViewController(username: String, password: String) {
-        let mainViewController = MainViewController()
-        let myPageViewController = MyPageViewController(
-            apiService: apiService,
-            username: username,
-            password: password
-        )
-        navigationController?.pushViewController(mainViewController, animated: true)
+    private func navigateToNextViewController() {
+        let tabBarController = TabBarViewController()
+        present(tabBarController, animated: true)
     }
     
 }

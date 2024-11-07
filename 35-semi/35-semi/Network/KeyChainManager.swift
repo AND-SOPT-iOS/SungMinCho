@@ -62,6 +62,7 @@ final class DefaultKeyChainManager: KeyChainManager {
         return String(data: searchData, encoding: .utf8)
     }
     
+    @discardableResult
     func removeValue() -> OSStatus {
         let savedData: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
