@@ -167,7 +167,7 @@ final class LoginViewController: BaseViewController {
     override func setLayout() {
         idTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(-150)
+            $0.centerY.equalToSuperview().offset(-180)
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.height.equalTo(44)
         }

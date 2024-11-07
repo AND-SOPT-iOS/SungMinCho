@@ -157,7 +157,11 @@ final class SignUpViewController: BaseViewController {
     }()
     
     private lazy var signUpSuccessAlert: UIAlertController = {
-        let alert = UIAlertController(title: "회원가입 완료", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: "회원가입 완료",
+            message: nil,
+            preferredStyle: .alert
+        )
         let action = UIAlertAction(title: "확인", style: .default) { _ in
             self.navigationController?.popViewController(animated: true)
         }
@@ -167,7 +171,11 @@ final class SignUpViewController: BaseViewController {
     }()
     
     private lazy var errorAlert: UIAlertController = {
-        let alert = UIAlertController(title: "오류", message: "알 수 없는 오류가 발생했습니다.", preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: "오류",
+            message: "알 수 없는 오류가 발생했습니다.",
+            preferredStyle: .alert
+        )
         let action = UIAlertAction(title: "확인", style: .default)
         alert.addAction(action)
         
@@ -217,7 +225,7 @@ final class SignUpViewController: BaseViewController {
     override func setLayout() {
         idTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(-180)
+            $0.top.equalToSuperview().offset(140)
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.height.equalTo(44)
         }
@@ -317,7 +325,6 @@ final class SignUpViewController: BaseViewController {
         let passwordValidation = passwordValidationTextField.text ?? ""
         let hobby = hobbyTextField.text ?? ""
         
-        
         if id.isEmpty == false
             && password.isEmpty == false
             && password == passwordValidation
@@ -351,11 +358,12 @@ final class SignUpViewController: BaseViewController {
             switch result {
             case .success:
                 present(signUpSuccessAlert, animated: true)
-            case .failure(let failure):
+            case .failure:
                 present(errorAlert, animated: true)
             }
         }
     }
+    
 }
 
 extension SignUpViewController: UITextFieldDelegate {
