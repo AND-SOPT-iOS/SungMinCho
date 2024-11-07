@@ -88,6 +88,30 @@ final class LoginViewController: BaseViewController {
         return button
     }()
     
+    private let loginAlert: UIAlertController = {
+        let alert = UIAlertController(
+            title: "로그인 실패",
+            message: "아이디와 비밀번호를 확인해주세요",
+            preferredStyle: .alert
+        )
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        
+        return alert
+    }()
+    
+    private let errorAlert: UIAlertController = {
+        let alert = UIAlertController(
+            title: "오류",
+            message: "알 수 없는 오류가 발생했습니다.",
+            preferredStyle: .alert
+        )
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        
+        return alert
+    }()
+    
     init(apiService: APIService) {
         self.apiService = apiService
         super.init(nibName: nil, bundle: nil)
@@ -102,6 +126,7 @@ final class LoginViewController: BaseViewController {
         setStyle()
         setUI()
         setLayout()
+        checkAutoLogin()
     }
     
     override func setStyle() {
@@ -193,15 +218,38 @@ final class LoginViewController: BaseViewController {
     }
     
     private func login(id: String, password: String) {
-        apiService.login(username: id, password: password) { result in
+        apiService.login(username: id, password: password) { [weak self] result in
             switch result {
-            case .success(let token):
-                print(token)
-                // TODO: 토큰 저장
+            case .success:
+                self?.navigateToNextViewController()
             case .failure(let failure):
-                dump(failure)
+                switch failure {
+                case .passwordInvalid, .loginInvalid:
+                    self?.presentLoginAlert()
+                default:
+                    self?.presentErrorAlert()
+                }
             }
         }
+    }
+    
+    private func checkAutoLogin() {
+        if DefaultKeyChainManager.shared.searchValue() != nil {
+            navigateToNextViewController()
+        }
+    }
+    
+    private func navigateToNextViewController() {
+        let nextViewController = MainViewController()
+        navigationController?.pushViewController(nextViewController, animated: true)
+    }
+    
+    private func presentLoginAlert() {
+        present(loginAlert, animated: true)
+    }
+    
+    private func presentErrorAlert() {
+        present(errorAlert, animated: true)
     }
     
 }
@@ -226,5 +274,5 @@ extension LoginViewController: UITextFieldDelegate {
 
 #Preview
 {
-    LoginViewController(apiService: APIService())
+    LoginViewController(apiService: APIService(keyChainManager: DefaultKeyChainManager()))
 }
