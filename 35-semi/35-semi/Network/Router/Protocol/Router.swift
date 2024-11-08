@@ -34,7 +34,7 @@ extension Router {
             if let parameters = parameters {
                 return try encoding.encode(request, with: parameters)
             } else {
-                throw RouterError.invalidRequest//TODO: 수정
+                throw RouterError.encoding
             }
         }
         

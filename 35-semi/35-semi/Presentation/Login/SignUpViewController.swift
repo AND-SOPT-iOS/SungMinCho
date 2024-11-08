@@ -364,8 +364,16 @@ final class SignUpViewController: BaseViewController {
         }
     }
     
-    private func signUp(id: String, password: String, hobby: String) {
-        apiService.register(username: id, password: password, hobby: hobby) { [weak self] result in
+    private func signUp(
+        id: String,
+        password: String,
+        hobby: String
+    ) {
+        apiService.register(
+            username: id,
+            password: password,
+            hobby: hobby
+        ) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:

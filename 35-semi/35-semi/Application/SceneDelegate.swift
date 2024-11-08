@@ -16,7 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         let keyChainManager = DefaultKeyChainManager()
         let apiService = APIService(keyChainManager: keyChainManager)
-        
         let rootViewController = SplashViewController(
             apiService: apiService,
             keyChainManager: keyChainManager
@@ -25,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             rootViewController: rootViewController
         )
         navigationController.isNavigationBarHidden = true
+        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }

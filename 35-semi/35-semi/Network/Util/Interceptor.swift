@@ -8,12 +8,6 @@
 import Alamofire
 import Foundation
 
-enum InterceptorError: Error {
-    
-    case loadTokenFailed
-    
-}
-
 final class Interceptor: RequestInterceptor {
     
     private let keyChainManager: KeyChainManager
