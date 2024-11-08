@@ -138,6 +138,50 @@ final class APIService {
         }
     }
     
+    // TODO: 서버가 잘못됐음...
+    // 성공에 대한 body 누락
+    func putMyHobby(
+        hobby: String,
+        password: String,
+        completion: @escaping (Result<Void, PutMyHobbyError>
+        ) -> Void
+    ) {
+        AF.request(
+            UserRouter.putMyHobby(
+                dto: PutMyHobbyDTO(
+                    hobby: hobby,
+                    password: password
+                )
+            ),
+            interceptor: Interceptor(keyChainManager: keyChainManager)
+        )
+        .validate()
+        .response { [weak self] response in
+            // TODO: 서버 정상화시 교체
+            guard let statusCode = response.response?.statusCode,
+//                  let data = response.data,
+                  let self
+            else {
+                completion(.failure(.bodyInvalid))
+                return
+            }
+            switch response.result {
+            case .success:
+                completion(.success(()))
+            case .failure:
+                // TODO: 서버 정상화시 교체
+//                let error = handlePutMyHobbyStatusCode(
+//                    statusCode: statusCode,
+//                    responseData: data
+//                )
+                let error = handlePutMyHobbyStatusCode(
+                    statusCode: statusCode
+                )
+                completion(.failure(error))
+            }
+        }
+    }
+    
 }
 
 extension APIService {
@@ -212,6 +256,45 @@ extension APIService {
             return .unknown
         }
     }
+    
+    private func handlePutMyHobbyStatusCode(
+        statusCode: Int
+    ) -> PutMyHobbyError {
+        print(statusCode)
+        switch statusCode {
+        case 400:
+            return .lengthInvalid
+        case 401:
+            return .tokenMissing
+        case 403:
+            return .tokenInvalid
+        case 404:
+            return .wrongPath
+        default:
+            return .unknown
+        }
+    }
+    
+    // TODO: 서버 정상화시 교체
+//    private func handlePutMyHobbyStatusCode(
+//        statusCode: Int,
+//        responseData: Data
+//    ) -> PutMyHobbyError {
+//        let errorCode = decodeError(responseData: responseData)
+//        dump(responseData)
+//        switch (statusCode, errorCode) {
+//        case (400, "00"):
+//            return .lengthInvalid
+//        case (401, "00"):
+//            return .tokenMissing
+//        case (403, "00"):
+//            return .tokenInvalid
+//        case (404, "00"):
+//            return .wrongPath
+//        default:
+//            return .unknown
+//        }
+//    }
     
     private func decodeError(responseData: Data) -> String {
         guard let errorResponse = try? JSONDecoder().decode(

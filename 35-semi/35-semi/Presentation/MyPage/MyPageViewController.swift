@@ -14,12 +14,13 @@ final class MyPageViewController: BaseViewController {
     
     private let usernameLabel: UILabel = {
         let label = UILabel()
-        
+        label.font = .systemFont(ofSize: 30, weight: .bold)
         return label
     }()
     
     private let hobbyLabel: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 24, weight: .regular)
         
         return label
     }()
@@ -72,18 +73,37 @@ final class MyPageViewController: BaseViewController {
         return alertController
     }()
     
-    private let editAlertController: UIAlertController = {
+    private lazy var editAlertController: UIAlertController = {
         let alertController = UIAlertController(
             title: "취미 변경",
             message: nil,
             preferredStyle: .alert
         )
-        alertController.addTextField { textField in
-            
-        }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        let confirmAction = UIAlertAction(title: "확인", style: .default)
+        alertController.addTextField { [weak self] textField in
+            guard let self else { return }
+            textField.placeholder = "변경할 취미를 입력하세요."
+            textField.delegate = self
+            textField.addTarget(
+                self,
+                action: #selector(editAlertControllerTextFieldDidChange(_:)),
+                for: .editingChanged
+            )
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(confirmAction)
+        
         return alertController
+    }()
+    
+    private lazy var confirmAction: UIAlertAction = {
+        UIAlertAction(title: "확인", style: .default) { [weak self] action in
+            guard let self else { return }
+            if let hobby = editAlertController.textFields?.first?.text,
+               hobby.isEmpty == false {
+                editHobby(hobby: hobby)
+            }
+        }
     }()
     
     init(apiService: APIService, keyChainManager: KeyChainManager) {
@@ -145,9 +165,9 @@ final class MyPageViewController: BaseViewController {
             guard let self else { return }
             switch result {
             case .success(let hobby):
-                hobbyLabel.text = "취미 : \(hobby)"
+                hobbyLabel.text = "\(hobby)"
                 if let username = (UserDefaults.standard.string(forKey: "id")) {
-                    usernameLabel.text = "이름 : \(username)"
+                    usernameLabel.text = "\(username)"
                 } else {
                     usernameLabel.text = "오류"
                 }
@@ -158,12 +178,55 @@ final class MyPageViewController: BaseViewController {
         }
     }
     
+    private func editHobby(hobby: String) {
+        if let password = UserDefaults.standard.object(forKey: "password") as? String {
+            apiService.putMyHobby(hobby: hobby, password: password) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success:
+                    loadUserData()
+                case .failure(let failure):
+                    dump(failure)
+                }
+            }
+        } else {
+            print("edit 실패")
+        }
+    }
+    
     @objc private func editButtonTapped() {
-        
+        editAlertController.textFields?.first?.text = hobbyLabel.text
+        present(editAlertController, animated: true)
     }
     
     @objc private func logoutButtonTapped() {
         present(logoutAlertController, animated: true)
+    }
+    
+    @objc private func editAlertControllerTextFieldDidChange(_ sender: UITextField) {
+        if sender.text?.isEmpty != false {
+            confirmAction.isEnabled = false
+        } else {
+            confirmAction.isEnabled = true
+        }
+    }
+    
+}
+
+extension MyPageViewController: UITextFieldDelegate {
+    
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else {
+            return false
+        }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        return updatedText.count <= 8
     }
     
 }

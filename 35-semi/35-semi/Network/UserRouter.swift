@@ -12,8 +12,7 @@ enum UserRouter {
     
     case register(dto: RegisterDTO)
     case getMyHobby
-    case getHobby(id: Int)
-    case putInformation
+    case putMyHobby(dto: PutMyHobbyDTO)
     
 }
 
@@ -29,9 +28,7 @@ extension UserRouter: Router {
             "/user"
         case .getMyHobby:
             "/user/my-hobby"
-        case .getHobby(let id):
-            "/user/\(id)/hobby"
-        case .putInformation:
+        case .putMyHobby:
             "/user"
         }
     }
@@ -42,9 +39,7 @@ extension UserRouter: Router {
                 .post
         case .getMyHobby:
                 .get
-        case .getHobby:
-                .get
-        case .putInformation:
+        case .putMyHobby:
                 .put
         }
     }
@@ -66,26 +61,21 @@ extension UserRouter: Router {
                 return try dto.asDictionary()
             case .getMyHobby:
                 return [:]
-            case .getHobby:
-                return nil
-            case .putInformation:
-                return nil
+            case .putMyHobby(let dto):
+                return try dto.asDictionary()
             }
         } catch {
             return nil
         }
     }
     
-    // TODO: Register 외 수정
     var encoding: (any ParameterEncoding)? {
         switch self {
         case .register:
             JSONEncoding.default
         case .getMyHobby:
             nil
-        case .getHobby:
-            nil
-        case .putInformation:
+        case .putMyHobby:
             JSONEncoding.default
         }
     }

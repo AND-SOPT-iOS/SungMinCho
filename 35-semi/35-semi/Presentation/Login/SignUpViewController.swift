@@ -76,6 +76,7 @@ final class SignUpViewController: BaseViewController {
         return label
     }()
     
+    
     private let passwordValidationHeaderLabel: UILabel = {
         let label = UILabel()
         label.text = "비밀번호 확인"
@@ -127,7 +128,6 @@ final class SignUpViewController: BaseViewController {
             action: #selector(hobbyTextFieldChanged),
             for: .editingChanged
         )
-        
         
         return textField
     }()
