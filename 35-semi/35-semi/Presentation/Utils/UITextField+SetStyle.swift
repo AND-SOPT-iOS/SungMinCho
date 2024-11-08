@@ -13,6 +13,7 @@ extension UITextField {
         autocapitalizationType = .none
         autocorrectionType = .no
         layer.borderWidth = 0.7
+        layer.borderColor = UIColor.label.cgColor
         layer.cornerRadius = 10
         clearButtonMode = .whileEditing
         returnKeyType = .done

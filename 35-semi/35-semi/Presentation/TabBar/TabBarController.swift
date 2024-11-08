@@ -9,28 +9,41 @@ import UIKit
 
 final class TabBarViewController: UITabBarController {
     
-    init() {
+    init(apiService: APIService) {
         super.init(nibName: nil, bundle: nil)
-        setStyle()
-        configureSubTabs()
+        configureSubTabs(apiService: apiService)
+        modalPresentationStyle = .overFullScreen
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
-    private func setStyle() {
-        view.backgroundColor = .systemBackground
-        modalPresentationStyle = .fullScreen
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setStyle()
     }
     
-    private func configureSubTabs() {
-        let viewControllers = TabItems.allCases.map { item in
-            let controller = item.viewController
-            controller.tabBarItem = item.tabBarItem
-            return UINavigationController(rootViewController: controller)
-        }
-        setViewControllers(viewControllers, animated: false)
+    private func setStyle() {
+        view.backgroundColor = .systemBackground
+    }
+    
+    private func configureSubTabs(apiService: APIService) {
+        let mainViewController = MainViewController()
+        let myPageViewController = MyPageViewController(apiService: apiService)
+        
+        mainViewController.tabBarItem = UITabBarItem(
+            title: "홈",
+            image: UIImage(systemName: "house"),
+            selectedImage: UIImage(systemName: "house.fill")
+        )
+        myPageViewController.tabBarItem = UITabBarItem(
+            title: "마이페이지",
+            image: UIImage(systemName: "person"),
+            selectedImage: UIImage(systemName: "person.fill")
+        )
+        
+        setViewControllers([mainViewController, myPageViewController], animated: false)
     }
     
 }
