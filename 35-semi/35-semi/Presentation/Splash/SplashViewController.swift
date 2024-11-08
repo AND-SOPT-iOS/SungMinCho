@@ -12,24 +12,6 @@ final class SplashViewController: BaseViewController {
     private let apiService: APIService
     private let keyChainManager: KeyChainManager
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "고양이 스플래시 🐈‍⬛"
-        label.font = .systemFont(ofSize: .init(30), weight: .bold)
-        label.textColor = .systemPink
-        
-        return label
-    }()
-    
-    private let splashImageView: UIImageView = {
-        let imageView = UIImageView(image: .cat3)
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.tintColor = .systemBlue
-        
-        return imageView
-    }()
-    
     init(apiService: APIService, keyChainManager: KeyChainManager) {
         self.apiService = apiService
         self.keyChainManager = keyChainManager
@@ -56,29 +38,7 @@ final class SplashViewController: BaseViewController {
         view.backgroundColor = .systemBackground
     }
     
-    override func setUI() {
-        [
-            titleLabel,
-            splashImageView
-        ].forEach {
-            view.addSubview($0)
-        }
-    }
-    
-    override func setLayout() {
-        splashImageView.snp.makeConstraints {
-            $0.width.height.equalTo(300)
-            $0.center.equalToSuperview()
-        }
-        
-        titleLabel.snp.makeConstraints {
-            $0.bottom.equalTo(splashImageView.snp.top).offset(-40)
-            $0.centerX.equalToSuperview()
-        }
-    }
-    
     private func checkAutoLogin() {
-        sleep(3)
         keyChainManager.removeValue()
         if let id = UserDefaults.standard.string(forKey: "id"),
            let password = UserDefaults.standard.string(forKey: "password") {
@@ -86,18 +46,27 @@ final class SplashViewController: BaseViewController {
                 guard let self else { return }
                 switch result {
                 case .success:
-                    let tabBarViewController = TabBarViewController(apiService: apiService)
-                    present(tabBarViewController, animated: false)
+                    let tabBarViewController = TabBarViewController(
+                        apiService: apiService,
+                        keyChainManager: keyChainManager
+                    )
+                    navigationController?.pushViewController(tabBarViewController, animated: false)
                 case .failure:
                     UserDefaults.standard.removeObject(forKey: "id")
                     UserDefaults.standard.removeObject(forKey: "password")
-                    let loginViewController = LoginViewController(apiService: apiService)
-                    present(loginViewController, animated: false)
+                    let loginViewController = LoginViewController(
+                        apiService: apiService,
+                        keyChainManager: keyChainManager
+                    )
+                    navigationController?.pushViewController(loginViewController, animated: false)
                 }
             }
         } else {
-            let loginViewController = LoginViewController(apiService: apiService)
-            present(loginViewController, animated: false)
+            let loginViewController = LoginViewController(
+                apiService: apiService,
+                keyChainManager: keyChainManager
+            )
+            navigationController?.pushViewController(loginViewController, animated: false)
         }
     }
     
