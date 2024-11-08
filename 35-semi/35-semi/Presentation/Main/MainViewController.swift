@@ -26,7 +26,6 @@ final class MainViewController: BaseViewController {
     
     override func setStyle() {
         title = "앱"
-        navigationItem.hidesBackButton = true
     }
     
     override func setUI() {

@@ -10,6 +10,7 @@ import UIKit
 final class LoginViewController: BaseViewController {
     
     private let apiService: APIService
+    private let keyChainManager: KeyChainManager
     
     private let idHeaderLabel: UILabel = {
         let label = UILabel()
@@ -128,7 +129,8 @@ final class LoginViewController: BaseViewController {
         return alert
     }()
     
-    init(apiService: APIService) {
+    init(apiService: APIService, keyChainManager: KeyChainManager) {
+        self.keyChainManager = keyChainManager
         self.apiService = apiService
         super.init(nibName: nil, bundle: nil)
     }
@@ -146,6 +148,7 @@ final class LoginViewController: BaseViewController {
     
     override func setStyle() {
         view.backgroundColor = .systemBackground
+        navigationItem.hidesBackButton = true
     }
     
     override func setUI() {
@@ -263,8 +266,18 @@ final class LoginViewController: BaseViewController {
     }
     
     private func navigateToNextViewController() {
-        let tabBarController = TabBarViewController()
-        present(tabBarController, animated: true)
+        let tabBarController = TabBarViewController(apiService: apiService, keyChainManager: keyChainManager)
+        resetView()
+        navigationController?.pushViewController(tabBarController, animated: true)
+    }
+    
+    private func resetView() {
+        idTextField.text = ""
+        passwordTextField.text = ""
+        idWarningLabel.isHidden = true
+        passwordWarningLabel.isHidden = true
+        idTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
     }
     
 }
@@ -289,5 +302,5 @@ extension LoginViewController: UITextFieldDelegate {
 
 #Preview
 {
-    LoginViewController(apiService: APIService(keyChainManager: DefaultKeyChainManager()))
+    LoginViewController(apiService: APIService(keyChainManager: DefaultKeyChainManager()), keyChainManager: DefaultKeyChainManager())
 }

@@ -76,6 +76,7 @@ final class APIService {
                 completion(.failure(.bodyInvalid))
                 return
             }
+            keyChainManager.removeValue()
             switch response.result {
             case .success:
                 guard let token = convertToDTO(
@@ -106,7 +107,7 @@ final class APIService {
     ) {
         AF.request(
             UserRouter.getMyHobby,
-            interceptor: Interceptor()
+            interceptor: Interceptor(keyChainManager: keyChainManager)
         )
         .validate()
         .response { [weak self] response in

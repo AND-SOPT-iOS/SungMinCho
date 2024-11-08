@@ -17,25 +17,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let keyChainManager = DefaultKeyChainManager()
         let apiService = APIService(keyChainManager: keyChainManager)
         
-        keyChainManager.removeValue()
-        if let id = UserDefaults.standard.string(forKey: "id"),
-           let password = UserDefaults.standard.string(forKey: "password") {
-            apiService.login(username: id, password: password) { [weak self] result in
-                guard let self else { return }
-                switch result {
-                case .success:
-                    let rootViewController = TabBarViewController()
-                    window?.rootViewController = rootViewController
-                case .failure:
-                    let rootViewController = LoginViewController(apiService: apiService)
-                    window?.rootViewController = UINavigationController(rootViewController: rootViewController)
-                }
-            }
-        } else {
-            let rootViewController = LoginViewController(apiService: apiService)
-            window?.rootViewController = UINavigationController(rootViewController: rootViewController)
-        }
-        
+        let rootViewController = SplashViewController(
+            apiService: apiService,
+            keyChainManager: keyChainManager
+        )
+        let navigationController = UINavigationController(
+            rootViewController: rootViewController
+        )
+        navigationController.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
     

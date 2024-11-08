@@ -16,6 +16,12 @@ enum InterceptorError: Error {
 
 final class Interceptor: RequestInterceptor {
     
+    private let keyChainManager: KeyChainManager
+    
+    init(keyChainManager: KeyChainManager) {
+        self.keyChainManager = keyChainManager
+    }
+    
     func adapt(
         _ urlRequest: URLRequest,
         for session: Session,
@@ -23,8 +29,7 @@ final class Interceptor: RequestInterceptor {
             Result<URLRequest, any Error>
         ) -> Void
     ) {
-        // TODO: KeyChainManager 주입
-        guard let token = DefaultKeyChainManager.shared.searchValue() else {
+        guard let token = keyChainManager.searchValue() else {
             completion(.failure(InterceptorError.loadTokenFailed))
             return
         }

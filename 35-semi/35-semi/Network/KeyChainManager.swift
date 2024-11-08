@@ -13,15 +13,14 @@ protocol KeyChainManager: Sendable {
     func saveValue(token: String) -> OSStatus
     func changeValue(token: String) -> OSStatus
     func searchValue() -> String?
+    @discardableResult
     func removeValue() -> OSStatus
     
 }
 
 final class DefaultKeyChainManager: KeyChainManager {
     
-    static let shared = DefaultKeyChainManager()
-    
-    let serviceName: String = "35-semi"
+    private let serviceName: String = "35-semi"
     
     func saveValue(token: String) -> OSStatus {
         let saveData: CFDictionary = [
@@ -75,7 +74,7 @@ final class DefaultKeyChainManager: KeyChainManager {
     private func handleStatus(status: OSStatus) {
         switch status {
         case errSecSuccess:
-            print("token success")
+            break
         case errSecDuplicateItem:
             print("duplicated")
         default:
