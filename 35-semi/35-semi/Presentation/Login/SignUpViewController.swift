@@ -162,8 +162,8 @@ final class SignUpViewController: BaseViewController {
             message: nil,
             preferredStyle: .alert
         )
-        let action = UIAlertAction(title: "확인", style: .default) { _ in
-            self.navigationController?.popViewController(animated: true)
+        let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            self?.navigationController?.popViewController(animated: true)
         }
         alert.addAction(action)
         
@@ -196,6 +196,18 @@ final class SignUpViewController: BaseViewController {
         setStyle()
         setUI()
         setLayout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+        navigationItem.hidesBackButton = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.isNavigationBarHidden = false
+        navigationItem.hidesBackButton = true
     }
     
     override func setStyle() {
