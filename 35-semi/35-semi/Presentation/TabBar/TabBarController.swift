@@ -9,10 +9,9 @@ import UIKit
 
 final class TabBarViewController: UITabBarController {
     
-    init(apiService: APIService) {
+    init(apiService: APIService, keyChainManager: KeyChainManager) {
         super.init(nibName: nil, bundle: nil)
-        configureSubTabs(apiService: apiService)
-        modalPresentationStyle = .overFullScreen
+        configureSubTabs(apiService: apiService, keyChainManager: keyChainManager)
     }
     
     required init?(coder: NSCoder) {
@@ -26,11 +25,15 @@ final class TabBarViewController: UITabBarController {
     
     private func setStyle() {
         view.backgroundColor = .systemBackground
+        navigationItem.hidesBackButton = true
     }
     
-    private func configureSubTabs(apiService: APIService) {
+    private func configureSubTabs(apiService: APIService, keyChainManager: KeyChainManager) {
         let mainViewController = MainViewController()
-        let myPageViewController = MyPageViewController(apiService: apiService)
+        let myPageViewController = MyPageViewController(
+            apiService: apiService,
+            keyChainManager: keyChainManager
+        )
         
         mainViewController.tabBarItem = UITabBarItem(
             title: "홈",
@@ -43,7 +46,14 @@ final class TabBarViewController: UITabBarController {
             selectedImage: UIImage(systemName: "person.fill")
         )
         
-        setViewControllers([mainViewController, myPageViewController], animated: false)
+        let mainNavigationController = UINavigationController(
+            rootViewController: mainViewController
+        )
+        let myPageNavigationController = UINavigationController(
+            rootViewController: myPageViewController
+        )
+        
+        setViewControllers([mainNavigationController, myPageNavigationController], animated: false)
     }
     
 }
