@@ -12,7 +12,11 @@ final class MainViewController: BaseViewController {
     private lazy var financeButton: UIButton = {
         let button = UIButton()
         button.setTitle("금융", for: .normal)
-        button.addTarget(self, action: #selector(financeButtonTapped), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(financeButtonTapped),
+            for: .touchUpInside
+        )
         
         return button
     }()
@@ -41,7 +45,10 @@ final class MainViewController: BaseViewController {
     }
     
     @objc private func financeButtonTapped() {
-        navigationController?.pushViewController(FinanceViewController(), animated: true)
+        navigationController?.pushViewController(
+            FinanceViewController(),
+            animated: true
+        )
     }
     
 }
