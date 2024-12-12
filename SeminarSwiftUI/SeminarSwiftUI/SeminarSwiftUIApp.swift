@@ -11,7 +11,7 @@ import SwiftUI
 struct SeminarSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            RankView()
+            RankView(viewModel: RankViewModel())
         }
     }
 }
